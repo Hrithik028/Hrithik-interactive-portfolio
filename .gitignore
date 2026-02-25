@@ -1,3 +1,6 @@
+# ================================
+# Logs
+# ================================
 logs
 *.log
 npm-debug.log*
@@ -6,18 +9,53 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# ================================
+# Dependencies
+# ================================
+node_modules/
+
+# ================================
+# Build Output
+# ================================
+dist/
+dist-ssr/
+.vite/
+
+# ================================
+# Local Environment Files
+# ================================
+.env
+.env.*
+!.env.example
 *.local
 
+# ================================
+# Editor / IDE
+# ================================
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
+
+# ================================
+# OS Files
+# ================================
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# ================================
+# Misc
+# ================================
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-.env
+.cache/
+coverage/
+
+# ================================
+# Optional: If you move assets to R2
+# Uncomment ONLY if assets fully removed
+# ================================
+# src/assets/
