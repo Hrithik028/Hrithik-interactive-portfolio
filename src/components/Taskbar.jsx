@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./Taskbar.module.css";
+import styles from "../styles/Taskbar.module.css";
 import { Menu, LogOut, Volume2, Wifi } from "lucide-react";
 
 export default function Taskbar({ openWindows, activeWindow, onWindowClick, onLogout }) {

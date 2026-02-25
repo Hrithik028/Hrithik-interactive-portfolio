@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Minus, Square, HelpCircle } from "lucide-react";
+import styles from "../styles/Window.module.css";
 
 const TASKBAR_HEIGHT = 32; // must match Taskbar height (h-8)
 
@@ -14,18 +15,20 @@ export default function Window({
   onMinimize,
   onToggleMaximize,
   initialPosition,
+  initialSize,
 }) {
-  // ✅ Hooks must run on every render (no early returns above)
+  // Hooks must run on every render
   const [position, setPosition] = useState(initialPosition);
-  const [restorePosition, setRestorePosition] = useState(initialPosition); // last non-maximized pos
+  const [size] = useState(() => initialSize || { w: 600, h: 500 });
+  const [restorePosition, setRestorePosition] = useState(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const windowRef = useRef(null);
 
   const clampPosition = (x, y) => {
     const rect = windowRef.current?.getBoundingClientRect();
-    const w = rect?.width ?? 600;
-    const h = rect?.height ?? 500;
+    const w = rect?.width ?? size.w ?? 600;
+    const h = rect?.height ?? size.h ?? 500;
 
     const maxX = Math.max(0, window.innerWidth - w);
     const maxY = Math.max(0, window.innerHeight - TASKBAR_HEIGHT - h);
@@ -37,11 +40,10 @@ export default function Window({
   };
 
   const handleMouseDown = (e) => {
-    if (isMaximized) return; // don't drag when maximized
+    if (isMaximized) return;
 
     const target = e.target;
-    const inHeader = target?.closest?.(".window-header");
-
+    const inHeader = target?.closest?.(`.${styles.titleBar}`);
     if (!inHeader) return;
 
     setIsDragging(true);
@@ -58,7 +60,7 @@ export default function Window({
 
       const next = clampPosition(e.clientX - dragOffset.x, e.clientY - dragOffset.y);
       setPosition(next);
-      setRestorePosition(next); // keep restore position in sync while dragging
+      setRestorePosition(next);
     };
 
     const handleMouseUp = () => setIsDragging(false);
@@ -74,7 +76,7 @@ export default function Window({
     };
   }, [isDragging, dragOffset, isMaximized]);
 
-  // When restoring from maximized, snap back to last known restore position
+  // When restoring from maximized, snap back
   useEffect(() => {
     if (!isMaximized) {
       setPosition((prev) => restorePosition || prev);
@@ -91,103 +93,75 @@ export default function Window({
     : {
       left: position.x,
       top: position.y,
-      width: "600px",
-      height: "500px",
+      width: `${size.w}px`,
+      height: `${size.h}px`,
       minWidth: "400px",
       minHeight: "300px",
     };
 
-  // ✅ Early return ONLY after all hooks are declared
+  // Early return after hooks
   if (isMinimized) return null;
 
   return (
     <div
       ref={windowRef}
-      className={`absolute shadow-lg flex flex-col ${isActive ? "z-50" : "z-40"}`}
-      style={{
-        ...rootStyle,
-        background: "#fff",
-        border: "1px solid #0054E3",
-        borderTop: "1px solid #316AC5",
-      }}
+      className={`${styles.window} ${isActive ? styles.active : styles.inactive}`}
+      style={rootStyle}
       onMouseDown={onFocus}
     >
       {/* Title Bar */}
       <div
-        className={`window-header h-7 px-2 flex items-center justify-between ${isMaximized ? "cursor-default" : "cursor-move"
-          }`}
-        style={{
-          background: isActive
-            ? "linear-gradient(to right, #0054E3, #316AC5, #0054E3)"
-            : "linear-gradient(to right, #7A7A7A, #ADADAD, #7A7A7A)",
-          borderBottom: "1px solid #003C9D",
-        }}
+        className={`${styles.titleBar} ${isMaximized ? styles.noDrag : styles.drag}`}
         onMouseDown={handleMouseDown}
         onDoubleClick={() => {
-          // Windows behavior: double click header toggles maximize
           if (!isMaximized) setRestorePosition(position);
           onToggleMaximize?.();
         }}
       >
-        <div className="flex items-center min-w-0">
-          <div className="w-4 h-4 mr-2 bg-white/20 rounded-sm flex items-center justify-center shrink-0">
-            <HelpCircle className="w-3 h-3 text-white" />
+        <div className={styles.left}>
+          <div className={styles.titleIcon} aria-hidden="true">
+            <HelpCircle className={styles.helpIcon} />
           </div>
-          <span className="text-white text-xs font-normal truncate">{title}</span>
+          <span className={styles.titleText} title={title}>
+            {title}
+          </span>
         </div>
 
-        <div className="flex items-center shrink-0">
-          {/* Minimize */}
+        <div className={styles.controls}>
           <button
             type="button"
             onClick={() => onMinimize?.()}
-            className="w-5 h-4 border flex items-center justify-center mr-0.5"
-            style={{
-              background: "linear-gradient(to bottom, #E6F3FF, #B3D9FF)",
-              borderColor: "#7BB3F0",
-            }}
+            className={`${styles.ctrlBtn} ${styles.ctrlMin}`}
             title="Minimize"
           >
-            <Minus className="w-2.5 h-2.5 text-black" />
+            <Minus className={styles.ctrlIcon} />
           </button>
 
-          {/* Maximize / Restore */}
           <button
             type="button"
             onClick={() => {
               if (!isMaximized) setRestorePosition(position);
               onToggleMaximize?.();
             }}
-            className="w-5 h-4 border flex items-center justify-center mr-0.5"
-            style={{
-              background: "linear-gradient(to bottom, #E6F3FF, #B3D9FF)",
-              borderColor: "#7BB3F0",
-            }}
+            className={`${styles.ctrlBtn} ${styles.ctrlMax}`}
             title={isMaximized ? "Restore" : "Maximize"}
           >
-            <Square className="w-2.5 h-2.5 text-black" />
+            <Square className={styles.ctrlIcon} />
           </button>
 
-          {/* Close */}
           <button
             type="button"
             onClick={() => onClose?.()}
-            className="w-5 h-4 border flex items-center justify-center"
-            style={{
-              background: "linear-gradient(to bottom, #FFE6E6, #FFB3B3)",
-              borderColor: "#F07B7B",
-            }}
+            className={`${styles.ctrlBtn} ${styles.ctrlClose}`}
             title="Close"
           >
-            <X className="w-2.5 h-2.5 text-black" />
+            <X className={styles.ctrlIcon} />
           </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto" style={{ backgroundColor: "#F0F0F0" }}>
-        {children}
-      </div>
+      <div className={styles.content}>{children}</div>
     </div>
   );
 }

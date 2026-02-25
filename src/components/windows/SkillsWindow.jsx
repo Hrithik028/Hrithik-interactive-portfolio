@@ -1,54 +1,124 @@
-import { Code, Database, Cloud, Cpu } from 'lucide-react';
+import React from "react";
+import { Code, Database, Cloud, Cpu, Server, ShieldCheck } from "lucide-react";
+import styles from "../../styles/SkillsWindow.module.css";
 
 const skillCategories = [
   {
     icon: Code,
-    title: 'Programming Languages',
-    skills: ['Python', 'JavaScript/TypeScript', 'R', 'SQL', 'Java', 'C++', 'Go']
-  },
-  {
-    icon: Cpu,
-    title: 'AI & Machine Learning',
-    skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Keras', 'OpenCV', 'Transformers', 'MLflow']
+    title: "Core Engineering",
+    subtitle: "Software Engineering fundamentals and practical tooling",
+    skills: [
+      "Python",
+      "JavaScript / TypeScript",
+      "Java",
+      "C++",
+      "Git",
+      "REST APIs",
+      "Data Structures & Algorithms"
+    ]
   },
   {
     icon: Database,
-    title: 'Data & Databases',
-    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Apache Kafka', 'InfluxDB', 'BigQuery', 'Snowflake']
+    title: "Data & Analytics",
+    subtitle: "Querying, analysis, and decision support",
+    skills: [
+      "SQL",
+      "PostgreSQL",
+      "Pandas",
+      "NumPy",
+      "Data Visualisation",
+      "Exploratory Data Analysis (EDA)",
+      "Feature Engineering"
+    ]
+  },
+  {
+    icon: Cpu,
+    title: "AI / Machine Learning",
+    subtitle: "Model building, evaluation, and applied ML",
+    skills: [
+      "Scikit-learn",
+      "PyTorch",
+      "TensorFlow",
+      "Transformers",
+      "OpenCV",
+      "Model Evaluation",
+      "Hyperparameter Tuning"
+    ]
   },
   {
     icon: Cloud,
-    title: 'Tools & Platforms',
-    skills: ['AWS', 'Azure', 'Docker', 'Kubernetes', 'Git', 'React', 'FastAPI', 'Apache Spark']
+    title: "Infrastructure & Dev Tools",
+    subtitle: "Deployment-aware development and reproducibility",
+    skills: [
+      "Docker",
+      "FastAPI",
+      "Linux Basics",
+      "CI/CD Basics",
+      "MLflow (experiment tracking)",
+      "AWS / Azure (foundations)"
+    ]
+  },
+  {
+    icon: Server,
+    title: "IT Support & Operations",
+    subtitle: "Support workflows and reliability mindset",
+    skills: [
+      "Incident Triage",
+      "Troubleshooting & Root Cause Thinking",
+      "Documentation & Handover",
+      "Access / Login Issue Resolution",
+      "Ticketing-style Workflow",
+      "Customer Communication"
+    ]
+  },
+  {
+    icon: ShieldCheck,
+    title: "Professional Practices",
+    subtitle: "How you work in teams and deliver outcomes",
+    skills: [
+      "Stakeholder Communication",
+      "Agile / Team Delivery",
+      "Requirements Clarification",
+      "Prioritisation Under Deadlines",
+      "Structured Reporting"
+    ]
   }
 ];
 
 export default function SkillsWindow() {
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Technical Skills</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Technical Skills</h1>
+        <p className={styles.subtitle}>
+          Balanced across Data Analytics, Software Engineering, and IT Support.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto">
+      <div className={styles.grid} role="list" aria-label="Skill categories">
         {skillCategories.map((category, index) => {
           const IconComponent = category.icon;
           return (
-            <div key={index} className="bg-gray-50 rounded-lg p-4">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                  <IconComponent className="w-5 h-5 text-blue-600" />
+            <section key={index} className={styles.card} role="listitem">
+              <div className={styles.cardHeader}>
+                <div className={styles.iconBox} aria-hidden="true">
+                  <IconComponent className={styles.icon} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{category.title}</h3>
+
+                <div className={styles.headerText}>
+                  <h3 className={styles.cardTitle}>{category.title}</h3>
+                  <p className={styles.cardSubtitle}>{category.subtitle}</p>
+                </div>
               </div>
-              <div className="space-y-2">
-                {category.skills.map((skill, skillIndex) => (
-                  <div key={skillIndex} className="bg-white px-3 py-2 rounded border border-gray-200 text-gray-700 text-sm">
+
+              <div className={styles.skillsWrap}>
+                {category.skills.map((skill, i) => (
+                  <span key={i} className={styles.skillPill}>
                     {skill}
-                  </div>
+                  </span>
                 ))}
               </div>
-            </div>
+            </section>
           );
         })}
       </div>

@@ -1,60 +1,123 @@
-import { User, MapPin, GraduationCap, Calendar } from 'lucide-react';
+import { MapPin, GraduationCap, Calendar, Wrench } from "lucide-react";
+import styles from "../../styles/AboutWindow.module.css";
+import profilePhoto from "../../assets/profile_pic1.jpg"; // <-- put your photo here
 
 export default function AboutWindow() {
+  const interests = [
+    "Data Analytics (SQL, dashboards, reporting)",
+    "Software Engineering (APIs, testing, Git, clean architecture)",
+    "AI / Machine Learning (evaluation, feature engineering, deployment mindset)",
+    "Automation & Scripting (Python utilities, workflow improvements)",
+    "IT Support / Service Desk (triage, troubleshooting, documentation, escalation)",
+    "Continuous Improvement (process, quality, reliability)",
+  ];
+
+  const strengths = [
+    { label: "Data Analyst", value: "SQL • EDA • KPI reporting • stakeholder communication" },
+    { label: "Software Engineer", value: "React • APIs • maintainable code • testing mindset" },
+    { label: "AI Engineer", value: "ML pipelines • evaluation • iterative improvement • practical deployment" },
+    { label: "IT Service Desk", value: "L1/L2 triage • clear documentation • customer-first support" },
+  ];
+
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-          <User className="w-8 h-8 text-blue-600" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Hrithik Jadhav</h1>
-          <p className="text-gray-600">Master of IT (AI) Graduate</p>
+    <div className={styles.container}>
+      {/* Header */}
+      <div className={styles.header}>
+        <img
+          src={profilePhoto}
+          alt="Hrithik Jadhav"
+          className={styles.profileImage}
+        />
+
+        <div className={styles.headerText}>
+          <h1 className={styles.name}>Hrithik Jadhav</h1>
+          <p className={styles.subtitle}>
+            AI & Data Engineer | Software Developer | IT Support
+          </p>
+          <div className={styles.badges}>
+            <span className={styles.badge}>Open to Opportunities</span>
+            <span className={styles.badgeSecondary}>Sydney • Australia</span>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Personal Information</h2>
-          <div className="space-y-2">
-            <div className="flex items-center">
-              <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-              <span className="text-gray-700">Sydney, NSW, Australia</span>
-            </div>
-            <div className="flex items-center">
-              <GraduationCap className="w-4 h-4 text-gray-500 mr-2" />
-              <span className="text-gray-700">University of New South Wales Sydney</span>
-            </div>
-            <div className="flex items-center">
-              <Calendar className="w-4 h-4 text-gray-500 mr-2" />
-              <span className="text-gray-700">Expected Graduation: 2026</span>
-            </div>
+      {/* Body */}
+      <div className={styles.content}>
+        {/* Personal Info */}
+        <div className={styles.card}>
+          <h2 className={styles.sectionTitle}>Personal Information</h2>
+
+          <div className={styles.infoItem}>
+            <MapPin className={styles.icon} />
+            <span>Sydney, NSW, Australia</span>
+          </div>
+
+          <div className={styles.infoItem}>
+            <GraduationCap className={styles.icon} />
+            <span>University of New South Wales (UNSW Sydney)</span>
+          </div>
+
+          <div className={styles.infoItem}>
+            <Calendar className={styles.icon} />
+            <span>Expected Graduation: 2026</span>
           </div>
         </div>
 
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">About Me</h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            I'm a passionate AI engineer with a Master's degree in Information Technology specializing in
-            Artificial Intelligence. My expertise lies in building end-to-end AI systems that transform
-            complex data into intelligent, production-ready solutions.
+        {/* Summary */}
+        <div className={styles.block}>
+          <h2 className={styles.sectionTitle}>About Me</h2>
+
+          <p className={styles.paragraph}>
+            I’m a Master of IT graduate with a strong interest in building intelligent, reliable systems that
+            bridge data, software, and real-world impact. My journey has been shaped by hands-on experience
+            across analytics, application development, and applied AI where I’ve learned to move from
+            understanding messy requirements to delivering structured, maintainable solutions.
           </p>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Throughout my academic and professional journey, I've developed a strong foundation in machine
+
+          <p className={styles.paragraph}>
+            Throughout my academic and professional journey, I've developed a solid foundation in machine
             learning, deep learning, and data engineering. I'm particularly interested in reinforcement
-            learning, computer vision, and multi-agent systems.
+            learning, computer vision, and multi-agent systems areas where intelligence meets system design
+            and performance. I enjoy thinking about not just how models work, but how they integrate into
+            scalable software systems.
           </p>
-          <p className="text-gray-700 leading-relaxed">
+
+          <p className={styles.paragraph}>
+            I approach problems with both a builder’s mindset and a support-oriented perspective. Whether
+            analysing data for insights, engineering software features, improving model performance, or
+            troubleshooting technical issues, I focus on clarity, reliability, and effective communication.
             I thrive in collaborative environments where I can apply cutting-edge AI techniques to solve
             real-world problems and create meaningful impact through technology.
           </p>
         </div>
 
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Interests</h2>
-          <div className="flex flex-wrap gap-2">
-            {['Machine Learning', 'Computer Vision', 'Data Science', 'Software Engineering', 'Research', 'Innovation'].map((interest) => (
-              <span key={interest} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+        {/* Strengths Grid */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.sectionTitleNoMargin}>What I Bring</h2>
+            <div className={styles.cardHeaderRight}>
+              <Wrench className={styles.iconSmall} />
+              <span className={styles.cardHint}>Balanced across build + support</span>
+            </div>
+          </div>
+
+          <div className={styles.strengthGrid}>
+            {strengths.map((s) => (
+              <div key={s.label} className={styles.strengthItem}>
+                <div className={styles.strengthTitle}>{s.label}</div>
+                <div className={styles.strengthValue}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Interests */}
+        <div className={styles.block}>
+          <h2 className={styles.sectionTitle}>Interests</h2>
+
+          <div className={styles.tags}>
+            {interests.map((interest) => (
+              <span key={interest} className={styles.tag}>
                 {interest}
               </span>
             ))}

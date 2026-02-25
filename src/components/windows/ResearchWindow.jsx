@@ -1,89 +1,150 @@
-import { BookOpen, Microscope, Cpu, FileText } from 'lucide-react';
+// import React from "react";
+import { Microscope, Cpu, FileText, Server, Wrench, BarChart3 } from "lucide-react";
+import styles from "../../styles/ResearchWindow.module.css";
 
 const researchAreas = [
   {
     icon: Cpu,
-    title: 'Reinforcement Learning',
-    description: 'Developing multi-agent systems for complex decision-making environments. Focus on reward shaping, policy optimization, and transfer learning.'
+    title: "Reinforcement Learning & Autonomous Decision-Making",
+    description:
+      "Interest in reinforcement learning for sequential decision-making, with emphasis on practical reward design, training stability, and evaluation in simulated environments."
   },
   {
     icon: Microscope,
-    title: 'Computer Vision',
-    description: 'Advanced image processing and object detection systems. Specializing in real-time applications for industrial automation.'
+    title: "Computer Vision & Applied Perception",
+    description:
+      "Applied computer vision for detection and analysis, focusing on building reliable pipelines and evaluating performance trade-offs for real-world use cases."
   },
   {
-    icon: BookOpen,
-    title: 'Multi-Agent Systems',
-    description: 'Coordination and communication protocols for autonomous agents. Research in collective intelligence and emergent behavior.'
+    icon: BarChart3,
+    title: "Data Analytics & Decision Support",
+    description:
+      "Interest in turning messy data into actionable insights through reproducible analysis, feature engineering, and clear reporting for stakeholder decision-making."
+  },
+  {
+    icon: Wrench,
+    title: "IT Operations & Service Reliability",
+    description:
+      "Interest in incident management, operational troubleshooting, and documentation practices that improve system uptime, service continuity, and support quality."
+  },
+  {
+    icon: Server,
+    title: "Distributed Systems & Systems Security",
+    description:
+      "Interest in reliability, scalability, failure modes, and security concerns in distributed systems, including how design choices impact performance and risk."
   }
 ];
 
 const publications = [
   {
-    title: 'Efficient Multi-Agent Reinforcement Learning with Reward Shaping',
-    venue: 'International Conference on AI Research (Submitted)',
-    year: '2024',
-    status: 'Under Review'
-  },
-  {
-    title: 'Real-time Object Detection for Industrial Quality Control',
-    venue: 'Journal of Computer Vision Applications',
-    year: '2023',
-    status: 'Published'
+    title: "A Compendium on Distributed Systems",
+    authors:
+      "Aneesh Khole, Atharva Thakar, Avadhoot Kulkarni, Hrithik Jadhav, Shreyas Shende, Varad Karajkhede",
+    venue: "Research Paper",
+    year: "—",
+    status: "Available",
+    links: [
+      { label: "View PDF", href: "https://doi.org/10.48550/arXiv.2302.03990" }
+    ],
+    abstract:
+      "Computer systems have evolved from sizable single-user machines to multi-user networked systems, enabling the distributed systems paradigm. A distributed system is regarded as software consisting of a collection of dependent network communication and computational nodes. This paradigm yields high performance and efficiency through decentralization across interconnected nodes. This paper defines key issues, challenges and security concerns in distributed systems and examines solutions developed over the years to address them, including brief coverage of components and working principles."
   }
 ];
 
+function statusClass(status) {
+  const s = String(status || "").toLowerCase();
+  if (s.includes("published")) return styles.statusGreen;
+  if (s.includes("available")) return styles.statusBlue;
+  if (s.includes("review") || s.includes("submitted")) return styles.statusYellow;
+  return styles.statusGray;
+}
+
 export default function ResearchWindow() {
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">AI Research</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Research & Interests</h1>
+        <p className={styles.subtitle}>
+          Focus areas aligned to data analytics, software engineering, and IT support while continuing to explore AI/ML systems.
+        </p>
       </div>
 
-      <div className="space-y-6 overflow-y-auto">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Research Areas</h2>
-          <div className="grid grid-cols-1 gap-4">
+      <div className={styles.scrollArea}>
+        {/* Research Areas */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Research Interests</h2>
+          <div className={styles.grid}>
             {researchAreas.map((area, index) => {
               const IconComponent = area.icon;
               return (
-                <div key={index} className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                      <IconComponent className="w-5 h-5 text-blue-600" />
+                <div key={index} className={styles.areaCard}>
+                  <div className={styles.areaHeader}>
+                    <div className={styles.iconBox}>
+                      <IconComponent className={styles.icon} aria-hidden="true" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900">{area.title}</h3>
+                    <h3 className={styles.areaTitle}>{area.title}</h3>
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed">{area.description}</p>
+                  <p className={styles.areaDescription}>{area.description}</p>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
 
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Publications & Papers</h2>
-          <div className="space-y-3">
+        {/* Publications */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Publications & Papers</h2>
+
+          <div className={styles.pubList}>
             {publications.map((pub, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <h4 className="text-base font-medium text-gray-900 flex-1 pr-2">{pub.title}</h4>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    pub.status === 'Published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                  }`}>
+              <article key={index} className={styles.pubCard}>
+                <div className={styles.pubTopRow}>
+                  <h4 className={styles.pubTitle}>{pub.title}</h4>
+
+                  <span className={`${styles.statusBadge} ${statusClass(pub.status)}`}>
                     {pub.status}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <FileText className="w-4 h-4" />
-                  <span>{pub.venue}</span>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <span>{pub.year}</span>
+
+                {pub.authors && pub.authors !== "—" ? (
+                  <p className={styles.pubAuthors}>{pub.authors}</p>
+                ) : null}
+
+                <div className={styles.pubMeta}>
+                  <div className={styles.pubMetaItem}>
+                    <FileText className={styles.metaIcon} aria-hidden="true" />
+                    <span>{pub.venue}</span>
+                  </div>
+
+                  {pub.year && pub.year !== "—" ? (
+                    <>
+                      <span className={styles.dot} aria-hidden="true" />
+                      <span className={styles.pubYear}>{pub.year}</span>
+                    </>
+                  ) : null}
                 </div>
-              </div>
+
+                {pub.abstract ? <p className={styles.pubAbstract}>{pub.abstract}</p> : null}
+
+                {pub.links?.length ? (
+                  <div className={styles.pubLinks}>
+                    {pub.links.map((l, i) => (
+                      <a
+                        key={i}
+                        className={styles.link}
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {l.label}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </article>
             ))}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

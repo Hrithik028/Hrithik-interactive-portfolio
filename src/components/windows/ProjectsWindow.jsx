@@ -1,83 +1,89 @@
-import { ExternalLink, Github, Play } from 'lucide-react';
+import React from "react";
+import { ExternalLink, Github } from "lucide-react";
+import styles from "../../styles/ProjectsWindow.module.css";
 
 const projects = [
   {
-    title: 'Intelligent Traffic Management System',
-    description: 'Real-time traffic optimization using computer vision and reinforcement learning algorithms.',
-    techStack: ['Python', 'PyTorch', 'OpenCV', 'React'],
-    status: 'Production',
-    type: 'AI/ML'
+    title: "Large Language Model Code Translation",
+    description:
+      "Multi-agent LLM system for reliable Python ↔ Java code translation with execution-based verification (UNSW COMP9900 Capstone). Implements planning, translation, and automated testing/repair loops.",
+    techStack: ["Python", "LLMs", "Docker", "AST Parsing"],
+    type: "AI Systems",
+    github: "https://github.com/Hrithik028/Large-Language-Model-Code-Translation"
   },
   {
-    title: 'Multi-Agent Trading Platform',
-    description: 'Autonomous trading agents using deep Q-learning for cryptocurrency market analysis.',
-    techStack: ['Python', 'TensorFlow', 'FastAPI', 'Redis'],
-    status: 'Research',
-    type: 'AI/ML'
+    title: "Amazon Climate Hot Event Prediction",
+    description:
+      "End-to-end machine learning pipeline predicting extreme heat events and monthly temperatures in the Amazon region using climate indices and neural network models with temporal generalisation evaluation.",
+    techStack: ["Python", "Neural Networks", "Time Series", "Jupyter"],
+    type: "Machine Learning",
+    github: "https://github.com/Hrithik028/amazon-climate-hot-event-prediction"
   },
   {
-    title: 'Customer Sentiment Analysis Pipeline',
-    description: 'End-to-end NLP pipeline processing 1M+ reviews with 94% accuracy classification.',
-    techStack: ['Python', 'Transformers', 'Apache Kafka', 'MongoDB'],
-    status: 'Production',
-    type: 'Data Science'
+    title: "Airbnb Visual Analytics (Sydney)",
+    description:
+      "Reproducible visual analytics pipeline analysing Airbnb pricing, demand, and spatial patterns in Sydney using Python and geospatial data.",
+    techStack: ["Python", "Pandas", "Geospatial Analysis", "Data Visualisation"],
+    type: "Data Analytics",
+    github: "https://github.com/Hrithik028/Airbnb-Visual-Analytics"
   },
   {
-    title: 'Computer Vision Quality Control',
-    description: 'Automated defect detection system reducing manual inspection time by 85%.',
-    techStack: ['Python', 'YOLO', 'Flask', 'Azure'],
-    status: 'Production',
-    type: 'Computer Vision'
+    title: "NBA Discord Bot",
+    description:
+      "Discord bot integrating official NBA endpoints and live scoreboard data to provide real-time scores, schedules, and player statistics.",
+    techStack: ["Python", "Discord API", "REST APIs"],
+    type: "Backend / API",
+    github: "https://github.com/Hrithik028/NBA-discord-bot"
   }
 ];
 
 export default function ProjectsWindow() {
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Projects</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>GitHub Projects</h1>
       </div>
 
-      <div className="space-y-4 overflow-y-auto">
+      <div className={styles.projectList}>
         {projects.map((project, index) => (
-          <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">{project.title}</h3>
-                <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{project.type}</span>
+          <div key={index} className={styles.projectCard}>
+            <div className={styles.cardHeader}>
+              <div className={styles.leftSection}>
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <span className={styles.typeBadge}>{project.type}</span>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                project.status === 'Production' ? 'bg-green-100 text-green-800' :
-                project.status === 'Research' ? 'bg-blue-100 text-blue-800' :
-                'bg-yellow-100 text-yellow-800'
-              }`}>
-                {project.status}
-              </span>
             </div>
-            
-            <p className="text-gray-600 mb-3 text-sm leading-relaxed">{project.description}</p>
-            
-            <div className="flex flex-wrap gap-1 mb-3">
-              {project.techStack.map((tech, techIndex) => (
-                <span key={techIndex} className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+
+            <p className={styles.description}>{project.description}</p>
+
+            <div className={styles.techStack}>
+              {project.techStack.map((tech, i) => (
+                <span key={i} className={styles.techTag}>
                   {tech}
                 </span>
               ))}
             </div>
-            
-            <div className="flex items-center gap-2">
-              <button className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium">
-                <Play className="w-3 h-3 mr-1" />
-                Demo
-              </button>
-              <button className="inline-flex items-center text-gray-600 hover:text-gray-700 text-sm">
-                <Github className="w-3 h-3 mr-1" />
-                Code
-              </button>
-              <button className="inline-flex items-center text-gray-600 hover:text-gray-700 text-sm">
-                <ExternalLink className="w-3 h-3 mr-1" />
-                Details
-              </button>
+
+            <div className={styles.actions}>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.actionLink}
+              >
+                <Github size={14} />
+                View Code
+              </a>
+
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.actionSecondary}
+              >
+                <ExternalLink size={14} />
+                Repository
+              </a>
             </div>
           </div>
         ))}

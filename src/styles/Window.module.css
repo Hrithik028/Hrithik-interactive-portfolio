@@ -1,0 +1,146 @@
+.window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #0054e3;
+    border-top: 1px solid #316ac5;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+    user-select: none;
+}
+
+.active {
+    z-index: 50;
+}
+
+.inactive {
+    z-index: 40;
+    filter: saturate(0.92);
+}
+
+/* Title bar */
+.titleBar {
+    height: 28px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #003c9d;
+    color: #fff;
+}
+
+.drag {
+    cursor: move;
+}
+
+.noDrag {
+    cursor: default;
+}
+
+/* Active vs inactive title gradient */
+.active .titleBar {
+    background: linear-gradient(to right, #0054e3, #316ac5, #0054e3);
+}
+
+.inactive .titleBar {
+    background: linear-gradient(to right, #7a7a7a, #adadad, #7a7a7a);
+}
+
+/* Left title area */
+.left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.titleIcon {
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 3px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+}
+
+.helpIcon {
+    width: 12px;
+    height: 12px;
+    color: #ffffff;
+}
+
+.titleText {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+}
+
+.ctrlBtn {
+    width: 20px;
+    height: 16px;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.ctrlIcon {
+    width: 10px;
+    height: 10px;
+    color: #111;
+}
+
+/* XP-ish button fills */
+.ctrlMin,
+.ctrlMax {
+    background: linear-gradient(to bottom, #e6f3ff, #b3d9ff);
+    border-color: #7bb3f0;
+}
+
+.ctrlClose {
+    background: linear-gradient(to bottom, #ffe6e6, #ffb3b3);
+    border-color: #f07b7b;
+}
+
+.ctrlBtn:hover {
+    filter: brightness(0.98);
+}
+
+.ctrlClose:hover {
+    background: linear-gradient(to bottom, #ffd3d3, #ff8f8f);
+}
+
+/* Content area */
+.content {
+    flex: 1;
+    overflow: auto;
+    background: #f0f0f0;
+}
+
+/* Optional: better scrollbars (Chrome) */
+.content::-webkit-scrollbar {
+    width: 9px;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #c6c6c6;
+    border-radius: 999px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #a7a7a7;
+}

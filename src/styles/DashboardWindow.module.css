@@ -1,0 +1,125 @@
+.container {
+    padding: 24px;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Header */
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.status {
+    color: #2563eb;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Grid */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Cards */
+
+.card {
+    background: white;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.card h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+/* Skills */
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.skillBadge {
+    background: #e5e7eb;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Buttons */
+
+.linkButton {
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.primaryBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.github {
+    background: black;
+    color: white;
+}
+
+.resume {
+    background: #1f2937;
+    color: white;
+}
+
+.contact {
+    background: #2563eb;
+    color: white;
+}

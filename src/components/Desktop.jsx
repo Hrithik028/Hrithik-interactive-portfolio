@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import myComputerIcon from "../assets/icons/Mycomputer-3.png";
 import documentsIcon from "../assets/icons/books.png";
-import resumeIcon from "../assets/icons/abiword.png";
-import networkIcon from "../assets/icons/Network-3.png";
+import resumeIcon from "../assets/icons/logviewer.png";
+import networkIcon from "../assets/icons/technical.png";
 import networkAltIcon from "../assets/icons/explorer.png";
 import briefcaseIcon from "../assets/icons/briefcase.png";
 import monitorIcon from "../assets/icons/utilities-system-monitor.png";
 import terminalIcon from "../assets/icons/utilities-terminal.png";
+import DashboardIcon from "../assets/icons/cs-applets.png";
 
 import Taskbar from "./Taskbar";
 import Window from "./Window";
@@ -20,8 +21,10 @@ import ContactWindow from "./Contact";
 import ResumeWindow from "./windows/ResumeWindow";
 /*import CertificationsWindow from "./windows/CertificationsWindow";*/
 import ExperienceWindow from "./windows/ExperienceWindow";
+import DashboardWindow from "./windows/DashboardWindow";
 
-import wallpaper from "../assets/wallpaper4.jpeg";
+import wallpaper from "../assets/icons/wallpaper4.jpeg";
+const TASKBAR_HEIGHT = 32;
 
 const desktopIcons = [
   {
@@ -66,6 +69,12 @@ const desktopIcons = [
     label: "Contact",
     component: ContactWindow,
   },
+  {
+    id: "dashboard",
+    iconSrc: DashboardIcon,
+    label: "Dashboard",
+    component: DashboardWindow
+  }
   /*{
     id: "certifications",
     iconSrc: terminalIcon,
@@ -74,26 +83,184 @@ const desktopIcons = [
   },*/
 ];
 
-export default function Desktop({ onLogout }) {
-  const [openWindows, setOpenWindows] = useState([]);
-  const [activeWindow, setActiveWindow] = useState(null);
+// --- Recruiter preset layout (tweak these numbers to match your screen) ---
+function computeSmallThreeWindowPreset(vw, vh) {
+  const H = vh - TASKBAR_HEIGHT;
+  const m = 14;
 
-  // NEW: per-window ui state
+  // Equal heights
+  const winH = Math.floor(H * 0.86);
+
+  // Three columns widths
+  const aboutW = Math.min(520, Math.floor(vw * 0.30));
+  const projectsW = Math.min(760, Math.floor(vw * 0.44));
+  const skillsW = Math.max(420, vw - aboutW - projectsW - m * 4);
+
+  const aboutX = m;
+  const aboutY = m;
+
+  const projectsX = aboutX + aboutW + m;
+  const projectsY = m;
+
+  const skillsX = projectsX + projectsW + m;
+  const skillsY = m;
+
+  return {
+    open: ["about", "projects", "skills"],
+    active: "projects",
+    frames: {
+      about: { x: aboutX, y: aboutY, w: aboutW, h: winH },
+      projects: { x: projectsX, y: projectsY, w: projectsW, h: winH },
+      skills: { x: skillsX, y: skillsY, w: skillsW, h: winH },
+    },
+  };
+}
+
+export default function Desktop({ session, onLogout }) {
+  // Recruiter mode: dashboard opens; Non-recruiter: nothing opens by default
+  const isRecruiterMode = String(session?.mode || "").toLowerCase() === "recruiter";
+  const defaultOpen = isRecruiterMode ? ["dashboard"] : [];
+  const defaultActive = isRecruiterMode ? "dashboard" : null;
+
+  const [openWindows, setOpenWindows] = useState(defaultOpen);
+  const [activeWindow, setActiveWindow] = useState(defaultActive);
+
+  const [hasShownPreset, setHasShownPreset] = useState(false);
+
+  // per-window ui state
   const [winState, setWinState] = useState({});
-  // winState[id] = { minimized: bool, maximized: bool }
+  // per-window frame (pos + size)
+  const [frames, setFrames] = useState({});
+
+  // Optional: if session loads AFTER initial render, ensure recruiter sees dashboard
+  useEffect(() => {
+    if (!isRecruiterMode) return;
+
+    setOpenWindows((prev) => (prev.length ? prev : ["dashboard"]));
+    setActiveWindow((prev) => prev ?? "dashboard");
+    setWinState((prev) => ({
+      ...prev,
+      dashboard: prev.dashboard ?? { minimized: false, maximized: false },
+    }));
+    setFrames((prev) => {
+      if (prev.dashboard) return prev;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight - TASKBAR_HEIGHT;
+
+      // size
+      const w = Math.min(920, Math.floor(vw * 0.62));
+      const h = Math.min(640, Math.floor(vh * 0.72));
+
+      // centered position
+      const x = Math.max(12, Math.floor((vw - w) / 2));
+      const y = Math.max(12, Math.floor((vh - h) / 2));
+
+      return {
+        ...prev,
+        dashboard: { x, y, w, h },
+      };
+    });
+  }, [isRecruiterMode]);
+
+  const ensureFrame = (windowId, index = 0) => {
+    setFrames((prev) => {
+      if (prev[windowId]) return prev;
+
+      const base = { x: 110 + index * 28, y: 80 + index * 28, w: 600, h: 500 };
+
+      const presets = {
+        dashboard: {
+          x: 90,
+          y: 70,
+          w: Math.min(980, Math.floor(window.innerWidth * 0.82)),
+          h: Math.min(
+            720,
+            Math.floor((window.innerHeight - TASKBAR_HEIGHT) * 0.78)
+          ),
+        },
+        about: { w: 560, h: 520 },
+        projects: { w: 820, h: 560 },
+        skills: { w: 760, h: 540 },
+        resume: { w: 860, h: 600 },
+        experience: { w: 820, h: 560 },
+        research: { w: 820, h: 560 },
+        contact: { w: 640, h: 520 },
+      };
+
+      return { ...prev, [windowId]: { ...base, ...(presets[windowId] ?? {}) } };
+    });
+  };
 
   const openWindow = (windowId) => {
     setOpenWindows((prev) => (prev.includes(windowId) ? prev : [...prev, windowId]));
     setWinState((prev) => ({
       ...prev,
-      [windowId]: prev[windowId] ?? { minimized: false, maximized: false },
-      // if already exists, ensure it is visible
-      ...(prev[windowId] ? { [windowId]: { ...prev[windowId], minimized: false } } : {}),
+      [windowId]: { ...(prev[windowId] ?? {}), minimized: false, maximized: false },
     }));
     setActiveWindow(windowId);
+    ensureFrame(windowId, openWindows.length);
   };
 
   const closeWindow = (windowId) => {
+    // Only recruiters get the 3-window preset when closing dashboard
+    if (windowId === "dashboard") {
+      if (!isRecruiterMode) {
+        // non-recruiter: just close dashboard normally
+        setOpenWindows((prev) => prev.filter((id) => id !== "dashboard"));
+
+        setWinState((prev) => {
+          const copy = { ...prev };
+          delete copy.dashboard;
+          return copy;
+        });
+
+        setFrames((prev) => {
+          const copy = { ...prev };
+          delete copy.dashboard;
+          return copy;
+        });
+
+        setActiveWindow((current) => (current === "dashboard" ? null : current));
+        return;
+      }
+
+      // recruiter: show 3-window preset ONCE
+      if (hasShownPreset) {
+        // close dashboard normally after first time
+        setOpenWindows((prev) => prev.filter((id) => id !== "dashboard"));
+
+        setWinState((prev) => {
+          const copy = { ...prev };
+          delete copy.dashboard;
+          return copy;
+        });
+
+        setFrames((prev) => {
+          const copy = { ...prev };
+          delete copy.dashboard;
+          return copy;
+        });
+
+        setActiveWindow((current) => (current === "dashboard" ? null : current));
+        return;
+      }
+
+      const preset = computeSmallThreeWindowPreset(window.innerWidth, window.innerHeight);
+
+      setOpenWindows(preset.open);
+      setActiveWindow(preset.active);
+
+      const nextState = {};
+      for (const id of preset.open) nextState[id] = { minimized: false, maximized: false };
+      setWinState(nextState);
+      setFrames(preset.frames);
+
+      setHasShownPreset(true);
+      return;
+    }
+
+    // Normal close for other windows
     setOpenWindows((prev) => {
       const next = prev.filter((id) => id !== windowId);
 
@@ -105,8 +272,13 @@ export default function Desktop({ onLogout }) {
       return next;
     });
 
-
     setWinState((prev) => {
+      const copy = { ...prev };
+      delete copy[windowId];
+      return copy;
+    });
+
+    setFrames((prev) => {
       const copy = { ...prev };
       delete copy[windowId];
       return copy;
@@ -116,7 +288,7 @@ export default function Desktop({ onLogout }) {
   const focusWindow = (windowId) => {
     setWinState((prev) => ({
       ...prev,
-      [windowId]: { ...(prev[windowId] ?? {}), minimized: false }, // focusing restores if minimized
+      [windowId]: { ...(prev[windowId] ?? {}), minimized: false },
     }));
     setActiveWindow(windowId);
   };
@@ -127,9 +299,9 @@ export default function Desktop({ onLogout }) {
       [windowId]: { ...(prev[windowId] ?? {}), minimized: true, maximized: false },
     }));
 
-    // pick next active window (last open that's not minimized)
     setActiveWindow((current) => {
       if (current !== windowId) return current;
+
       const remaining = openWindows.filter((id) => id !== windowId);
       for (let i = remaining.length - 1; i >= 0; i--) {
         const id = remaining[i];
@@ -151,14 +323,10 @@ export default function Desktop({ onLogout }) {
     setActiveWindow(windowId);
   };
 
-  // XP-style: click taskbar button
-  // - if minimized -> restore+focus
-  // - else if active -> minimize (optional but feels very XP)
-  // - else -> focus
   const handleTaskbarClick = (windowId) => {
     const state = winState[windowId];
     if (state?.minimized) return focusWindow(windowId);
-    if (activeWindow === windowId) return minimizeWindow(windowId); // optional XP behaviour
+    if (activeWindow === windowId) return minimizeWindow(windowId);
     return focusWindow(windowId);
   };
 
@@ -171,22 +339,18 @@ export default function Desktop({ onLogout }) {
       />
 
       {/* Desktop Icons */}
-      <div className="absolute top-4 left-4 grid grid-cols-1 gap-1 z-10">
+      <div className="absolute top-3 left-3 z-10 grid grid-cols-1 min-[420px]:grid-cols-1
+                gap-1 md:gap-3 max-h-[calc(100vh-48px)] overflow-y-auto pr-1">
         {desktopIcons.map((icon) => (
           <div
             key={icon.id}
-            className="w-24 select-none cursor-pointer"
+            className="w-[72px] sm:w-[80px] md:w-[96px] select-none cursor-pointer"
             onClick={() => openWindow(icon.id)}
             onDoubleClick={() => openWindow(icon.id)}
           >
-            <div className="flex flex-col items-center px-2 py-2 rounded-md hover:bg-white/15 active:bg-white/20 transition">
-              <img
-                src={icon.iconSrc}
-                alt={icon.label}
-                className="w-12 h-12 drop-shadow"
-              />
-
-              <span className="mt-1 text-white text-[11px] text-center drop-shadow">
+            <div className="flex flex-col items-center px-1 py-1 rounded-md hover:bg-white/15 active:bg-white/20 transition">
+              <img src={icon.iconSrc} alt={icon.label} className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12" />
+              <span className="text-[10px] sm:text-[11px] md:text-[12px] leading-tight text-white">
                 {icon.label}
               </span>
             </div>
@@ -202,6 +366,13 @@ export default function Desktop({ onLogout }) {
         const WindowComponent = iconData.component;
         const state = winState[windowId] ?? { minimized: false, maximized: false };
 
+        const frame = frames[windowId] ?? {
+          x: 100 + index * 30,
+          y: 80 + index * 30,
+          w: 600,
+          h: 500,
+        };
+
         return (
           <Window
             key={windowId}
@@ -213,9 +384,11 @@ export default function Desktop({ onLogout }) {
             onFocus={() => focusWindow(windowId)}
             onMinimize={() => minimizeWindow(windowId)}
             onToggleMaximize={() => toggleMaximize(windowId)}
-            initialPosition={{ x: 100 + index * 30, y: 80 + index * 30 }}
+            initialPosition={{ x: frame.x, y: frame.y }}
+            initialSize={{ w: frame.w, h: frame.h }}
           >
-            <WindowComponent />
+            {/* critical: allow dashboard buttons to open other windows */}
+            <WindowComponent onOpen={openWindow} />
           </Window>
         );
       })}

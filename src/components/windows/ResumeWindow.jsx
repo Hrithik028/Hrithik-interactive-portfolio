@@ -1,71 +1,85 @@
-import { Download, FileText, Eye } from 'lucide-react';
+import React from "react";
+import { Download, Eye, FileText, Copy } from "lucide-react";
+import styles from "../../styles/ResumeWindow.module.css";
+
+import resumePdf from "../../assets/resume/Hrithik_Jadhav_Resume.pdf";
 
 export default function ResumeWindow() {
+  const handleCopy = async () => {
+    const text =
+      `Hrithik Jadhav — Master of IT (AI)\n` +
+      `Sydney, Australia\n` +
+      `Focus: Data Analyst | Software Engineer | IT Support\n\n` +
+      `Highlights:\n` +
+      `• Built AI/ML + analytics projects (time-series climate prediction, Airbnb visual analytics)\n` +
+      `• Developed an LLM-based code translation system (multi-agent, execution-verified)\n` +
+      `• Built an API-integrated NBA Discord bot (backend + real-time data)\n`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      // optional: you can add a toast later
+    } catch (e) {
+      // ignore silently
+    }
+  };
+
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Resume</h1>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Resume</h1>
+        <p className={styles.subtitle}>
+          One-click preview + download.
+        </p>
       </div>
 
-      <div className="space-y-6">
-        <div className="bg-gray-50 rounded-lg p-6 text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <FileText className="w-8 h-8 text-blue-600" />
+      <div className={styles.card}>
+        <div className={styles.iconBox} aria-hidden="true">
+          <FileText className={styles.icon} />
+        </div>
+
+        <div className={styles.main}>
+          <div className={styles.name}>Hrithik Jadhav — Resume</div>
+          <div className={styles.meta}>
+            Master of IT (AI) · Data Analyst · Software Engineer · IT Support
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Hrithik Jadhav - Resume</h2>
-          <p className="text-gray-600 mb-6">Master of IT (AI) | Software Engineer & Data Analyst</p>
-          
-          <div className="flex gap-3 justify-center">
-            <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
-            </button>
-            <button className="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-              <Eye className="w-4 h-4 mr-2" />
+
+          <div className={styles.actions}>
+            <a
+              className={styles.primaryBtn}
+              href={resumePdf}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Eye size={16} />
               Preview
-            </button>
-          </div>
-        </div>
+            </a>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume Highlights</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-start">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-              <span className="text-gray-700">Master of Information Technology (AI Specialization) - UTS</span>
-            </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-              <span className="text-gray-700">3+ years experience in AI/ML development and research</span>
-            </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-              <span className="text-gray-700">Published researcher in reinforcement learning and computer vision</span>
-            </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-              <span className="text-gray-700">Proficient in Python, PyTorch, TensorFlow, and cloud platforms</span>
-            </div>
-            <div className="flex items-start">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-              <span className="text-gray-700">Experience with production ML systems and data pipelines</span>
-            </div>
+            <a className={styles.secondaryBtn} href={resumePdf} download>
+              <Download size={16} />
+              Download PDF
+            </a>
           </div>
-        </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Available Formats</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
-              <div className="font-medium text-gray-900">PDF Format</div>
-              <div className="text-sm text-gray-600">Standard resume format</div>
-            </button>
-            <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
-              <div className="font-medium text-gray-900">Word Document</div>
-              <div className="text-sm text-gray-600">Editable format</div>
-            </button>
-          </div>
+
         </div>
+      </div>
+
+      <div className={styles.highlights}>
+        <h2 className={styles.sectionTitle}>Fast Highlights</h2>
+        <ul className={styles.list}>
+          <li>
+            <span className={styles.bullet} aria-hidden="true" />
+            ML + analytics projects on GitHub (climate time-series, Airbnb analytics)
+          </li>
+          <li>
+            <span className={styles.bullet} aria-hidden="true" />
+            LLM code translation system (multi-agent + execution verification)
+          </li>
+          <li>
+            <span className={styles.bullet} aria-hidden="true" />
+            Backend/API project (NBA Discord bot)
+          </li>
+        </ul>
       </div>
     </div>
   );

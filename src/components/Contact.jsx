@@ -1,6 +1,6 @@
 import React from "react";
 import { Github, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react";
-import styles from "./Contact.module.css";
+import styles from "../styles/Contact.module.css";
 
 /**
  * Usage:

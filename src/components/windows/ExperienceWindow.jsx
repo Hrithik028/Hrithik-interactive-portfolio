@@ -1,99 +1,164 @@
-import { Calendar, MapPin, Building } from 'lucide-react';
+import React from "react";
+import { Calendar, MapPin, Building, Award, ExternalLink } from "lucide-react";
+
+import saiepBadge from "../../assets/certifications/SAIEP-badge.png";
+import saiepCert from "../../assets/certifications/SAIEP-certificate.pdf";
+
+import styles from "../../styles/ExperienceWindow.module.css";
 
 const experiences = [
   {
-    role: 'AI Research Assistant',
-    company: 'University of Technology Sydney',
-    location: 'Sydney, Australia',
-    period: 'Feb 2023 - Present',
-    type: 'Research',
-    description: 'Leading research in multi-agent reinforcement learning systems. Published 2 papers on autonomous decision-making algorithms.',
+    role: "Senior Customer Service Associate",
+    company: "Sushi Train",
+    location: "Surry Hills, NSW",
+    period: "Dec 2024 – Present",
+    type: "Operations & Support",
+    description:
+      "Operate in a high-volume service environment, managing issue triage, incident resolution, and handovers while maintaining operational continuity.",
     achievements: [
-      'Developed novel reward shaping techniques improving training efficiency by 40%',
-      'Collaborated with industry partners on real-world applications',
-      'Mentored 5 undergraduate students in AI research projects'
+      "Act as first-line support, triaging high-volume requests and resolving the majority of issues within defined service expectations.",
+      "Diagnose problems under time constraints, prioritising critical incidents and escalating complex cases appropriately.",
+      "Maintain structured records of issues and resolutions to ensure accurate handovers and consistent service delivery.",
+      "Optimised team coordination workflows to reduce service delays during peak operational periods."
     ]
   },
   {
-    role: 'Data Science Intern',
-    company: 'Commonwealth Bank of Australia',
-    location: 'Sydney, Australia',
-    period: 'Jun 2023 - Dec 2023',
-    type: 'Industry',
-    description: 'Built machine learning models for fraud detection and customer analytics, processing millions of transactions daily.',
+    role: "Student Consultant – Industry Project (SAIEP)",
+    company:
+      "UNSW – Student as Industry Engagement Program (Client: Killara Initiatives)",
+    location: "Sydney, Australia",
+    period: "Jun 2024 (2-week engagement)",
+    type: "Industry Project",
+    description:
+      "Delivered a client-facing industry report analysing a real-world business challenge using structured research, analysis, and recommendation development.",
     achievements: [
-      'Improved fraud detection accuracy by 15% using ensemble methods',
-      'Deployed ML models to production serving 10M+ customers',
-      'Created automated reporting dashboards reducing manual work by 60%'
-    ]
-  },
-  {
-    role: 'Software Development Lead',
-    company: 'University Tech Club',
-    location: 'Sydney, Australia',
-    period: 'Mar 2022 - Feb 2023',
-    type: 'Leadership',
-    description: 'Led a team of 8 developers building web applications and organizing technical workshops for 200+ students.',
-    achievements: [
-      'Managed development of 3 major web applications',
-      'Organized 12+ technical workshops on modern development practices',
-      'Increased club membership by 150% through innovative programs'
+      "Conducted structured secondary research and competitor analysis to diagnose core operational and strategic challenges.",
+      "Synthesised research findings into evidence-based recommendations aligned with measurable business outcomes.",
+      "Collaborated in an agile-style team environment, tracking deliverables and meeting strict project deadlines.",
+      "Presented an implementation roadmap including prioritisation, risks/constraints, and execution timeline."
+    ],
+    evidence: [
+      {
+        title: "SAIEP Digital Badge",
+        type: "badge",
+        file: saiepBadge,
+        thumbnail: saiepBadge
+      },
+      {
+        title: "SAIEP Completion Certificate (PDF)",
+        type: "certificate",
+        file: saiepCert
+      }
     ]
   }
 ];
 
+function typeVariant(type) {
+  const t = String(type || "").toLowerCase();
+  if (t.includes("industry")) return styles.badgeGreen;
+  if (t.includes("support") || t.includes("operations")) return styles.badgeBlue;
+  return styles.badgePurple;
+}
+
+function EvidenceIcon({ kind }) {
+  const k = String(kind || "").toLowerCase();
+  if (k.includes("badge"))
+    return <Award className={styles.expEvidenceIcon} aria-hidden="true" />;
+  return <ExternalLink className={styles.expEvidenceIcon} aria-hidden="true" />;
+}
+
 export default function ExperienceWindow() {
   return (
-    <div className="p-6 h-full">
-      <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Professional Experience</h1>
+    <div className={styles.expWindow}>
+      <div className={styles.expHeader}>
+        <h1 className={styles.expTitle}>Professional Experience</h1>
       </div>
 
-      <div className="space-y-6 overflow-y-auto">
+      <div className={styles.expList} role="list" aria-label="Experience list">
         {experiences.map((exp, index) => (
-          <div key={index} className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">{exp.role}</h3>
-                <div className="flex items-center text-blue-600 font-medium mb-2">
-                  <Building className="w-4 h-4 mr-1" />
-                  {exp.company}
+          <article key={index} className={styles.expCard} role="listitem">
+            <div className={styles.expTopRow}>
+              <div className={styles.expTopLeft}>
+                <h3 className={styles.expRole}>{exp.role}</h3>
+                <div className={styles.expCompanyRow}>
+                  <Building className={styles.expIcon} aria-hidden="true" />
+                  <span className={styles.expCompany}>{exp.company}</span>
                 </div>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                exp.type === 'Industry' ? 'bg-green-100 text-green-800' :
-                exp.type === 'Research' ? 'bg-blue-100 text-blue-800' :
-                'bg-purple-100 text-purple-800'
-              }`}>
+
+              {/* ✅ combine base badge + variant */}
+              <span className={`${styles.badge} ${typeVariant(exp.type)}`}>
                 {exp.type}
               </span>
             </div>
-            
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-1" />
-                {exp.period}
+
+            <div className={styles.expMeta}>
+              <div className={styles.expMetaItem}>
+                <Calendar className={styles.expMetaIcon} aria-hidden="true" />
+                <span>{exp.period}</span>
               </div>
-              <div className="flex items-center">
-                <MapPin className="w-4 h-4 mr-1" />
-                {exp.location}
+
+              <div className={styles.expMetaItem}>
+                <MapPin className={styles.expMetaIcon} aria-hidden="true" />
+                <span>{exp.location}</span>
               </div>
             </div>
-            
-            <p className="text-gray-600 mb-3 text-sm leading-relaxed">{exp.description}</p>
-            
-            <div>
-              <h5 className="font-medium text-gray-900 mb-2 text-sm">Key Achievements:</h5>
-              <ul className="space-y-1">
-                {exp.achievements.map((achievement, achievementIndex) => (
-                  <li key={achievementIndex} className="flex items-start text-sm">
-                    <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 mr-2 flex-shrink-0"></div>
-                    <span className="text-gray-600">{achievement}</span>
+
+            <p className={styles.expDescription}>{exp.description}</p>
+
+            <div className={styles.expAchievements}>
+              <h5 className={styles.expAchievementsTitle}>Key Achievements</h5>
+              <ul className={styles.expAchievementsList}>
+                {exp.achievements.map((achievement, i) => (
+                  <li key={i} className={styles.expAchievementItem}>
+                    <span className={styles.expBullet} aria-hidden="true" />
+                    <span className={styles.expAchievementText}>
+                      {achievement}
+                    </span>
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
+
+            {exp.evidence?.length ? (
+              <div className={styles.expEvidence}>
+                <h5 className={styles.expEvidenceTitle}>Credentials</h5>
+                <div className={styles.expEvidenceRow}>
+                  {exp.evidence.map((item, i) => (
+                    <a
+                      key={i}
+                      href={item.file}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.expEvidenceCard}
+                      title={item.title}
+                      aria-label={`Open ${item.title}`}
+                    >
+                      {item.thumbnail ? (
+                        <img
+                          className={styles.expEvidenceThumb}
+                          src={item.thumbnail}
+                          alt={item.title}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className={styles.expEvidenceFile}>
+                          <EvidenceIcon kind={item.type} />
+                        </div>
+                      )}
+
+                      <div className={styles.expEvidenceText}>
+                        <div className={styles.expEvidenceName}>
+                          {item.title}
+                        </div>
+                        <div className={styles.expEvidenceMeta}>Open</div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </article>
         ))}
       </div>
     </div>

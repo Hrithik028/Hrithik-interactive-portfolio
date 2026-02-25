@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import styles from "./LoginScreen.module.css";
-import profilephoto from "../assets/profile_pic2.jpeg";
-import xpLogo from "../assets/windows logo.png";
+import styles from "../styles/LoginScreen.module.css";
+import profilephoto from "../assets/icons/profile_pic2.jpeg";
+import xpLogo from "../assets/icons/windows logo.png";
 import { ChevronRight } from "lucide-react";
 
 const hints = [
@@ -30,7 +30,10 @@ export default function LoginScreen({ onLogin }) {
             return;
         }
 
-        onLogin({ name: name.trim() || "Guest", mode: profileMode });
+        onLogin({
+            name: profileMode === "Recruiter" ? "Recruiter" : name.trim() || "Guest",
+            mode: profileMode
+        });
     };
 
     useEffect(() => {
@@ -134,11 +137,11 @@ export default function LoginScreen({ onLogin }) {
                                     <div className={styles.panelHeader}>Choose profile</div>
                                     <div className={styles.panelBody}>
                                         <div className={styles.panelDesc}>
-                                            This doesn’t change your name — it selects a mode (Recruiter / Technical) for routing later.
+
                                         </div>
 
                                         <div className={styles.panelGrid}>
-                                            {["Hrithik", "Recruiter", "Technical"].map((mode) => (
+                                            {["Hrithik", "Recruiter"].map((mode) => (
                                                 <button
                                                     key={mode}
                                                     type="button"
