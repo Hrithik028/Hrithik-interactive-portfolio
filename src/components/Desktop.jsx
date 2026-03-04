@@ -1,14 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-
-import myComputerIcon from "../assets/icons/Mycomputer-3.png";
-import documentsIcon from "../assets/icons/books.png";
-import resumeIcon from "../assets/icons/logviewer.png";
-import networkIcon from "../assets/icons/technical.png";
-import networkAltIcon from "../assets/icons/explorer.png";
-import briefcaseIcon from "../assets/icons/briefcase.png";
-import monitorIcon from "../assets/icons/utilities-system-monitor.png";
-import terminalIcon from "../assets/icons/utilities-terminal.png";
-import DashboardIcon from "../assets/icons/cs-applets.png";
+import { ASSETS } from "../config/assets";
 
 import Taskbar from "./Taskbar";
 import Window from "./Window";
@@ -23,55 +14,55 @@ import ResumeWindow from "./windows/ResumeWindow";
 import ExperienceWindow from "./windows/ExperienceWindow";
 import DashboardWindow from "./windows/DashboardWindow";
 
-import wallpaper from "../assets/icons/wallpaper4.jpeg";
+const wallpaper = ASSETS.images.wallpaper
 const TASKBAR_HEIGHT = 32;
 
 const desktopIcons = [
   {
     id: "about",
-    iconSrc: myComputerIcon,
+    iconSrc: ASSETS.icons.myComputer,
     label: "About Me",
     component: AboutWindow,
   },
   {
     id: "projects",
-    iconSrc: documentsIcon,
+    iconSrc: ASSETS.icons.documents,
     label: "Projects",
     component: ProjectsWindow,
   },
   {
     id: "resume",
-    iconSrc: resumeIcon,
+    iconSrc: ASSETS.icons.resume,
     label: "Resume",
     component: ResumeWindow,
   },
   {
     id: "skills",
-    iconSrc: networkIcon,
+    iconSrc: ASSETS.icons.technical,
     label: "Technical Skills",
     component: SkillsWindow,
   },
   {
     id: "experience",
-    iconSrc: briefcaseIcon,
+    iconSrc: ASSETS.icons.briefcase,
     label: "Experience",
     component: ExperienceWindow,
   },
   {
     id: "research",
-    iconSrc: monitorIcon,
+    iconSrc: ASSETS.icons.monitor,
     label: "Research",
     component: ResearchWindow,
   },
   {
     id: "contact",
-    iconSrc: networkAltIcon,
+    iconSrc: ASSETS.icons.explorer,
     label: "Contact",
     component: ContactWindow,
   },
   {
     id: "dashboard",
-    iconSrc: DashboardIcon,
+    iconSrc: ASSETS.icons.dashboard,
     label: "Dashboard",
     component: DashboardWindow
   }
