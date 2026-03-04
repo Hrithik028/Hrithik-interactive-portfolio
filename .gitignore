@@ -28,6 +28,8 @@ dist-ssr/
 .env.*
 !.env.example
 *.local
+*.env.local
+.env.local
 
 # ================================
 # Editor / IDE
@@ -53,6 +55,7 @@ desktop.ini
 *.sw?
 .cache/
 coverage/
+
 
 # ================================
 # Optional: If you move assets to R2
