@@ -23,19 +23,93 @@ Instead of a scrolling website, visitors explore a desktop environment with drag
 
 ---
 
-# 📸 Portfolio Preview
+# 🎥 Portfolio Demo
 
 <p align="center">
-<img src="./screenshots/desktop.png" width="800">
+<img src="./screenshots/Demo.gif" width="900">
 </p>
 
-Example Windows:
+--- 
 
-- About Me Window
-- Projects Window
-- Skills Window
-- Research Window
-- Experience Window
+# 📸 Portfolio Preview
+
+## Boot & Login Experience
+
+<table>
+<tr>
+<td align="center">
+<img src="./screenshots/BootingScreen.png" width="450"><br>
+<b>Boot Screen</b>
+</td>
+
+<td align="center">
+<img src="./screenshots/LoginScreen.png" width="450"><br>
+<b>Login Screen</b>
+</td>
+</tr>
+</table>
+
+The portfolio begins with a **Windows-style boot and login experience**, creating a nostalgic and engaging first impression.
+
+---
+
+## Desktop Interface
+
+<p align="center">
+<img src="./screenshots/Desktop.png" width="900">
+</p>
+
+The main interface behaves like a **desktop operating system**, allowing users to open multiple windows simultaneously.
+
+Features include:
+
+• Desktop icons  
+• Taskbar navigation  
+• Window management  
+
+---
+
+## Portfolio Windows
+
+<table>
+<tr>
+<td align="center">
+<img src="./screenshots/AboutMe.png" width="420"><br>
+<b>About Window</b>
+</td>
+
+<td align="center">
+<img src="./screenshots/Projects.png" width="420"><br>
+<b>Projects Window</b>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img src="./screenshots/Skills.png" width="420"><br>
+<b>Skills Window</b>
+</td>
+
+<td align="center">
+<img src="./screenshots/Research.png" width="420"><br>
+<b>Research Window</b>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img src="./screenshots/Contact.png" width="420"><br>
+<b>Contact Window</b>
+</td>
+
+<td align="center">
+<img src="./screenshots/Dashboard.png" width="420"><br>
+<b>Dashboard View</b>
+</td>
+</tr>
+</table>
+
+Each section of the portfolio opens as a desktop application window, allowing visitors to explore projects, experience, research, and skills interactively.
 
 ---
 
@@ -153,13 +227,13 @@ src
 Clone the repository
 
 ```
-git clone https://github.com/yourusername/portfolio.git
+git clone https://github.com/Hrithik028/Hrithik-interactive-portfolio.git
 ```
 
 Navigate into the folder
 
 ```
-cd portfolio
+cd Hrithik-interactive-portfolio
 ```
 
 Install dependencies
