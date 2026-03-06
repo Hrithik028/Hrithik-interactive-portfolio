@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { ASSETS } from "../config/assets";
+
 import styles from "../styles/LoginScreen.module.css";
-import profilephoto from "../assets/icons/profile_pic2.jpeg";
-import xpLogo from "../assets/icons/windows logo.png";
+// import profilephoto from "../assets/icons/profile_pic2.jpeg";
+// import xpLogo from "../assets/icons/windows logo.png";
 import { ChevronRight } from "lucide-react";
 
 const hints = [
@@ -60,7 +62,7 @@ export default function LoginScreen({ onLogin }) {
                     <div className={styles.leftPane}>
                         <div className={styles.brandBlock}>
                             <img
-                                src={xpLogo}
+                                src={ASSETS.icons.windowsLogo}
                                 alt="Windows XP"
                                 className={styles.brandLogoImg}
                                 draggable="false"
@@ -79,7 +81,7 @@ export default function LoginScreen({ onLogin }) {
                     <div className={styles.rightPane}>
                         <div className={styles.card}>
                             <div className={styles.avatarTile}>
-                                <img src={profilephoto} alt="Hrithik" className={styles.avatarImg} />
+                                <img src={ASSETS.images.profile} alt="Hrithik" className={styles.avatarImg} />
                             </div>
 
                             <div className={styles.nameText}>{name.trim() || "Guest"}</div>
