@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { X, Minus, Square, HelpCircle } from "lucide-react";
 import styles from "../styles/Window.module.css";
 
-const TASKBAR_HEIGHT = 32; // must match Taskbar height (h-8)
+ // const maxY = Math.max(0, window.innerHeight - taskbarHeight - h); // must match Taskbar height (h-8)
 
 export default function Window({
   title,
@@ -10,6 +10,8 @@ export default function Window({
   isActive,
   isMinimized,
   isMaximized,
+  isMobile = false,
+  taskbarHeight = 32,
   onClose,
   onFocus,
   onMinimize,
@@ -19,7 +21,7 @@ export default function Window({
 }) {
   // Hooks must run on every render
   const [position, setPosition] = useState(initialPosition);
-  const [size] = useState(() => initialSize || { w: 600, h: 500 });
+  const [size, setSize] = useState(() => initialSize || { w: 600, h: 500 });
   const [restorePosition, setRestorePosition] = useState(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -31,7 +33,7 @@ export default function Window({
     const h = rect?.height ?? size.h ?? 500;
 
     const maxX = Math.max(0, window.innerWidth - w);
-    const maxY = Math.max(0, window.innerHeight - TASKBAR_HEIGHT - h);
+    const maxY = Math.max(0, window.innerHeight - taskbarHeight - h);
 
     return {
       x: Math.max(0, Math.min(maxX, x)),
@@ -40,7 +42,7 @@ export default function Window({
   };
 
   const handleMouseDown = (e) => {
-    if (isMaximized) return;
+    if (isMobile || isMaximized) return;
 
     const target = e.target;
     const inHeader = target?.closest?.(`.${styles.titleBar}`);
@@ -83,21 +85,43 @@ export default function Window({
     }
   }, [isMaximized, restorePosition]);
 
-  const rootStyle = isMaximized
+  const rootStyle = isMobile
     ? {
-      left: 0,
-      top: 0,
-      width: "100vw",
-      height: `calc(100vh - ${TASKBAR_HEIGHT}px)`,
-    }
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: `calc(100vh - ${taskbarHeight}px)`,
+        borderRadius: 0,
+      }
+    : isMaximized
+    ? {
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: `calc(100vh - ${taskbarHeight}px)`,
+      }
     : {
-      left: position.x,
-      top: position.y,
-      width: `${size.w}px`,
-      height: `${size.h}px`,
-      minWidth: "400px",
-      minHeight: "300px",
-    };
+        left: position.x,
+        top: position.y,
+        width: `${size.w}px`,
+        height: `${size.h}px`,
+        minWidth: "320px",
+        minHeight: "300px",
+      };
+
+  useEffect(() => {
+    if (isMobile) {
+      setPosition({ x: 0, y: 0 });
+      setSize({
+        w: window.innerWidth,
+        h: window.innerHeight - taskbarHeight,
+      });
+      return;
+    }
+
+    setPosition((prev) => initialPosition ?? prev);
+    setSize((prev) => initialSize ?? prev);
+  }, [isMobile, taskbarHeight, initialPosition, initialSize]);
 
   // Early return after hooks
   if (isMinimized) return null;
@@ -105,15 +129,16 @@ export default function Window({
   return (
     <div
       ref={windowRef}
-      className={`${styles.window} ${isActive ? styles.active : styles.inactive}`}
+      className={`${styles.window} ${isMobile ? styles.mobileWindow : ""} ${isActive ? styles.active : styles.inactive}`}
       style={rootStyle}
       onMouseDown={onFocus}
     >
       {/* Title Bar */}
       <div
-        className={`${styles.titleBar} ${isMaximized ? styles.noDrag : styles.drag}`}
+        className={`${styles.titleBar} ${isMobile || isMaximized ? styles.noDrag : styles.drag}`}
         onMouseDown={handleMouseDown}
         onDoubleClick={() => {
+          if (isMobile) return;
           if (!isMaximized) setRestorePosition(position);
           onToggleMaximize?.();
         }}
@@ -122,7 +147,10 @@ export default function Window({
           <div className={styles.titleIcon} aria-hidden="true">
             <HelpCircle className={styles.helpIcon} />
           </div>
-          <span className={styles.titleText} title={title}>
+          <span
+            className={`${styles.titleText} ${isMobile ? styles.titleTextMobile : ""}`}
+            title={title}
+          >
             {title}
           </span>
         </div>
@@ -131,7 +159,7 @@ export default function Window({
           <button
             type="button"
             onClick={() => onMinimize?.()}
-            className={`${styles.ctrlBtn} ${styles.ctrlMin}`}
+            className={`${styles.ctrlBtn} ${styles.ctrlMin} ${isMobile ? styles.ctrlBtnMobile : ""}`}
             title="Minimize"
           >
             <Minus className={styles.ctrlIcon} />
@@ -140,10 +168,11 @@ export default function Window({
           <button
             type="button"
             onClick={() => {
+              if (isMobile) return;
               if (!isMaximized) setRestorePosition(position);
               onToggleMaximize?.();
             }}
-            className={`${styles.ctrlBtn} ${styles.ctrlMax}`}
+            className={`${styles.ctrlBtn} ${styles.ctrlMax} ${isMobile ? styles.ctrlBtnMobile : ""}`}
             title={isMaximized ? "Restore" : "Maximize"}
           >
             <Square className={styles.ctrlIcon} />
@@ -152,7 +181,7 @@ export default function Window({
           <button
             type="button"
             onClick={() => onClose?.()}
-            className={`${styles.ctrlBtn} ${styles.ctrlClose}`}
+            className={`${styles.ctrlBtn} ${styles.ctrlClose} ${isMobile ? styles.ctrlBtnMobile : ""}`}
             title="Close"
           >
             <X className={styles.ctrlIcon} />
@@ -161,7 +190,9 @@ export default function Window({
       </div>
 
       {/* Content */}
-      <div className={styles.content}>{children}</div>
+      <div className={`${styles.content} ${isMobile ? styles.contentMobile : ""}`}>
+        {children}
+      </div>
     </div>
   );
 }

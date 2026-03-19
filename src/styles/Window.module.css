@@ -144,3 +144,72 @@
 .content::-webkit-scrollbar-thumb:hover {
     background: #a7a7a7;
 }
+
+.mobileWindow {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.titleTextMobile {
+    font-size: 14px;
+}
+
+.ctrlBtnMobile {
+    width: 28px;
+    height: 22px;
+}
+
+.contentMobile {
+    padding-bottom: 4px;
+}
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+    .window {
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .titleBar {
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .left {
+        gap: 10px;
+    }
+
+    .titleIcon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .helpIcon {
+        width: 13px;
+        height: 13px;
+    }
+
+    .titleText {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .controls {
+        gap: 4px;
+    }
+
+    .ctrlBtn {
+        width: 28px;
+        height: 22px;
+    }
+
+    .ctrlIcon {
+        width: 11px;
+        height: 11px;
+    }
+
+    .content {
+        -webkit-overflow-scrolling: touch;
+    }
+}
