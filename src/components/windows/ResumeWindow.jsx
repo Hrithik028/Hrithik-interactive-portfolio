@@ -1,8 +1,9 @@
 import React from "react";
 import { Download, Eye, FileText, Copy } from "lucide-react";
 import styles from "../../styles/ResumeWindow.module.css";
+import { ASSETS } from "../../config/assets";
 
-import resumePdf from "../../assets/resume/Hrithik_Jadhav_Resume.pdf";
+const resumePdf = ASSETS.docs.resume;
 
 export default function ResumeWindow() {
   const handleCopy = async () => {
