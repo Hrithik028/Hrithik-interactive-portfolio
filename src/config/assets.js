@@ -21,6 +21,6 @@ export const ASSETS = {
     },
 
     docs: {
-        resume: `${ASSET_BASE}/docs/Hrithik_Jadhav_Resume.pdf`
+        resume: `${ASSET_BASE}/docs/resume/Hrithik_Jadhav_Resume.pdf`
     }
 };
