@@ -1,34 +1,61 @@
 .container {
     height: 100%;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
+    background: #ece9d8;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 .header {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #111827;
     margin: 0;
 }
 
+.subtitle {
+    margin: 4px 0 0;
+    color: #333;
+    font-size: 12px;
+}
+
+.versionBadge {
+    flex: 0 0 auto;
+    padding: 4px 7px;
+    background: #dbeafe;
+    border: 1px solid #7aa7e8;
+    color: #0b3f93;
+    font-size: 11px;
+    font-weight: 800;
+}
+
 .projectList {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
     overflow-y: auto;
-    max-height: calc(100% - 60px);
-    padding-right: 6px;
+    max-height: calc(100% - 78px);
+    padding: 0 6px 32px 0;
+    box-sizing: border-box;
 }
 
 .projectCard {
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 18px;
+    border: 1px solid #aca899;
+    padding: 14px;
+    box-shadow: inset 1px 1px #fff;
     transition: box-shadow 150ms ease, transform 150ms ease;
 }
 
@@ -69,9 +96,29 @@
 
 .description {
     font-size: 13.5px;
-    line-height: 1.6;
-    color: #4b5563;
-    margin-bottom: 14px;
+    line-height: 1.5;
+    color: #333;
+    margin: 0 0 8px;
+}
+
+.projectMeta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: #555;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.impact {
+    margin: 0 0 12px;
+    padding-left: 8px;
+    border-left: 3px solid #2f7d16;
+    color: #1f4d13;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.45;
 }
 
 .techStack {
@@ -84,9 +131,10 @@
 .techTag {
     font-size: 11px;
     padding: 4px 8px;
-    background: #f3f4f6;
-    border-radius: 6px;
+    background: #f3f0de;
+    border: 1px solid #d2cec0;
     color: #374151;
+    font-weight: 700;
 }
 
 .actions {

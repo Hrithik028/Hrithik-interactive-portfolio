@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Desktop from "./components/Desktop";
 import LoginScreen from "./components/LoginScreen";
 import BootScreen from "./components/BootScreen";
+import LogoffScreen from "./components/LogoffScreen";
 
 const KEY = "xp_session";
 
@@ -18,12 +19,8 @@ function App() {
     const saved = sessionStorage.getItem(KEY);
     return saved ? safeParse(saved) : null;
   });
-
-  // Boot flow state
-  const [booted, setBooted] = useState(() => {
-    // if user already has a session, don’t show boot again
-    return Boolean(session);
-  });
+  const [loggingOff, setLoggingOff] = useState(false);
+  const [booted, setBooted] = useState(() => Boolean(session));
 
   useEffect(() => {
     if (session) {
@@ -35,33 +32,36 @@ function App() {
 
   const handleLogin = (payload) => {
     setSession(payload);
-    // show boot right after successful login
     setBooted(false);
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem(KEY);
-    setSession(null);
-    // next time user logs in, boot shows again
-    setBooted(false);
+    setLoggingOff(true);
   };
 
-  // 1) No session -> show Login
+  const finishLogout = () => {
+    sessionStorage.removeItem(KEY);
+    sessionStorage.removeItem("bootShownThisSession");
+    setSession(null);
+    setBooted(false);
+    setLoggingOff(false);
+  };
+
+  if (loggingOff) {
+    return <LogoffScreen name={session?.name} onComplete={finishLogout} />;
+  }
+
   if (!session) return <LoginScreen onLogin={handleLogin} />;
 
-  // 2) Has session but not booted -> show BootScreen, then continue to Desktop
   if (!booted) {
     return (
-      <BootScreen
-        onComplete={() => setBooted(true)}
-        durationMs={1100}
-        showOnceKey="bootShownThisSession"
-        title="Welcome to Hrithik’s Portfolio"
-      />
+      <div className="min-h-screen">
+        <Desktop session={session} onLogout={handleLogout} />
+        <BootScreen onComplete={() => setBooted(true)} />
+      </div>
     );
   }
 
-  // 3) Booted -> show Desktop
   return (
     <div className="min-h-screen">
       <Desktop session={session} onLogout={handleLogout} />

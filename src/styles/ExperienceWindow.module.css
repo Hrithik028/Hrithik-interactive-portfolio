@@ -1,41 +1,49 @@
-/* ExperienceWindow.css */
-
 .expWindow {
     height: 100%;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family: Tahoma, Arial, sans-serif;
+    background: #ece9d8;
 }
 
 .expHeader {
     display: flex;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .expTitle {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #111827;
     margin: 0;
 }
 
+.expSubtitle {
+    margin: 4px 0 0;
+    color: #333;
+    font-size: 12px;
+}
+
 .expList {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-
+    gap: 12px;
     overflow-y: auto;
-    max-height: calc(100% - 48px);
-    padding-right: 6px;
+    max-height: calc(100% - 78px);
+    padding: 0 6px 32px 0;
+    box-sizing: border-box;
 }
 
 .expCard {
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    border: 1px solid #aca899;
+    padding: 14px;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .expTopRow {
@@ -52,9 +60,9 @@
 }
 
 .expRole {
-    margin: 0 0 6px 0;
-    font-size: 16px;
-    font-weight: 750;
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 800;
     color: #111827;
 }
 
@@ -66,57 +74,57 @@
     flex-wrap: wrap;
 }
 
-.expIcon {
-    width: 16px;
-    height: 16px;
+.expIcon,
+.expMetaIcon {
+    width: 15px;
+    height: 15px;
     flex: 0 0 auto;
 }
 
 .expCompany {
-    font-weight: 650;
-    color: #2563eb;
+    font-weight: 700;
+    color: #003c9d;
     line-height: 1.3;
-
-    /* avoid overflow if long */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    max-width: 100%;
     word-break: break-word;
 }
 
 .badge {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 4px 8px;
     white-space: nowrap;
     border: 1px solid transparent;
 }
 
-.badge--green {
+.badgeGreen {
     background: #dcfce7;
     color: #166534;
-    border-color: #bbf7d0;
+    border-color: #86bf8d;
 }
 
-.badge--blue {
+.badgeBlue {
     background: #dbeafe;
     color: #1d4ed8;
-    border-color: #bfdbfe;
+    border-color: #7aa7e8;
 }
 
-.badge--purple {
+.badgePurple {
     background: #ede9fe;
     color: #5b21b6;
-    border-color: #ddd6fe;
+    border-color: #b7a7e8;
+}
+
+.badgeNeutral {
+    background: #f3f0de;
+    color: #333;
+    border-color: #d2cec0;
 }
 
 .expMeta {
     display: flex;
-    gap: 16px;
+    gap: 14px;
     flex-wrap: wrap;
-    font-size: 13px;
+    font-size: 12px;
     color: #4b5563;
     margin-bottom: 10px;
 }
@@ -127,21 +135,17 @@
     gap: 6px;
 }
 
-.expMetaIcon {
-    width: 16px;
-    height: 16px;
-}
-
 .expDescription {
-    margin: 0 0 12px 0;
-    font-size: 13.5px;
+    margin: 0 0 12px;
+    font-size: 13px;
     line-height: 1.5;
-    color: #4b5563;
+    color: #333;
 }
 
-.expAchievementsTitle {
-    margin: 0 0 8px 0;
-    font-size: 13.5px;
+.expAchievementsTitle,
+.expEvidenceTitle {
+    margin: 0 0 8px;
+    font-size: 12px;
     font-weight: 800;
     color: #111827;
 }
@@ -158,36 +162,27 @@
 .expAchievementItem {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    font-size: 13.5px;
+    gap: 9px;
+    font-size: 13px;
     line-height: 1.45;
 }
 
 .expBullet {
     width: 7px;
     height: 7px;
-    border-radius: 999px;
     background: #2563eb;
-    margin-top: 7px;
+    margin-top: 6px;
     flex: 0 0 auto;
 }
 
 .expAchievementText {
-    color: #4b5563;
+    color: #333;
 }
 
-/* Evidence / Credentials */
 .expEvidence {
     margin-top: 14px;
     padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.expEvidenceTitle {
-    margin: 0 0 8px 0;
-    font-size: 13.5px;
-    font-weight: 800;
-    color: #111827;
+    border-top: 1px solid #d2cec0;
 }
 
 .expEvidenceRow {
@@ -201,40 +196,35 @@
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 10px;
+    border: 1px solid #aca899;
+    background: #f8f8f8;
+    padding: 9px;
     min-width: 240px;
     max-width: 360px;
-    transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
     color: inherit;
 }
 
 .expEvidenceCard:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-    border-color: #cbd5e1;
+    border-color: #316ac5;
+    background: #eef6ff;
+}
+
+.expEvidenceThumb,
+.expEvidenceFile {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #aca899;
+    background: #fff;
+    flex: 0 0 auto;
 }
 
 .expEvidenceThumb {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
     object-fit: cover;
-    border: 1px solid #e5e7eb;
-    flex: 0 0 auto;
 }
 
 .expEvidenceFile {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
     display: grid;
     place-items: center;
-    background: #f9fafb;
-    flex: 0 0 auto;
 }
 
 .expEvidenceIcon {
@@ -244,17 +234,13 @@
 }
 
 .expEvidenceText {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
     min-width: 0;
 }
 
 .expEvidenceName {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     color: #111827;
-
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -262,24 +248,15 @@
 }
 
 .expEvidenceMeta {
-    font-size: 12px;
+    margin-top: 2px;
+    font-size: 11px;
     color: #6b7280;
 }
 
-/* Optional: nicer scrollbar (Chrome/Edge) */
 .expList::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 .expList::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-}
-
-.expList::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
-    border: 2px solid transparent;
-    background-clip: content-box;
+    background: #c7c3b2;
 }

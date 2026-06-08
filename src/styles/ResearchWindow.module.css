@@ -1,16 +1,22 @@
 .container {
     height: 100%;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
+    background: #ece9d8;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 .header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .title {
     margin: 0 0 6px 0;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #111827;
 }
@@ -25,7 +31,8 @@
 .scrollArea {
     overflow-y: auto;
     max-height: calc(100% - 70px);
-    padding-right: 6px;
+    padding: 0 6px 32px 0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -52,10 +59,10 @@
 }
 
 .areaCard {
-    background: #f9fafb;
-    border: 1px solid #eef2f7;
-    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #aca899;
     padding: 14px;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .areaHeader {
@@ -69,8 +76,8 @@
 .iconBox {
     width: 34px;
     height: 34px;
-    border-radius: 10px;
     background: #dbeafe;
+    border: 1px solid #7aa7e8;
     display: grid;
     place-items: center;
     flex: 0 0 auto;
@@ -106,9 +113,9 @@
 
 .pubCard {
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    border: 1px solid #aca899;
     padding: 14px;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .pubTopRow {
@@ -198,7 +205,6 @@
     font-size: 11px;
     font-weight: 800;
     padding: 4px 10px;
-    border-radius: 999px;
     white-space: nowrap;
     border: 1px solid transparent;
 }

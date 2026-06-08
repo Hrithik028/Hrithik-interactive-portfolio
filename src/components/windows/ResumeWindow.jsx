@@ -1,35 +1,16 @@
-import React from "react";
-import { Download, Eye, FileText, Copy } from "lucide-react";
+import { Download, Eye, FileText } from "lucide-react";
 import styles from "../../styles/ResumeWindow.module.css";
 import { ASSETS } from "../../config/assets";
 
 const resumePdf = ASSETS.docs.resume;
 
 export default function ResumeWindow() {
-  const handleCopy = async () => {
-    const text =
-      `Hrithik Jadhav — Master of IT (AI)\n` +
-      `Sydney, Australia\n` +
-      `Focus: Data Analyst | Software Engineer | IT Support\n\n` +
-      `Highlights:\n` +
-      `• Built AI/ML + analytics projects (time-series climate prediction, Airbnb visual analytics)\n` +
-      `• Developed an LLM-based code translation system (multi-agent, execution-verified)\n` +
-      `• Built an API-integrated NBA Discord bot (backend + real-time data)\n`;
-
-    try {
-      await navigator.clipboard.writeText(text);
-      // optional: you can add a toast later
-    } catch (e) {
-      // ignore silently
-    }
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Resume</h1>
         <p className={styles.subtitle}>
-          One-click preview + download.
+          One-click preview and download for recruiters.
         </p>
       </div>
 
@@ -39,9 +20,9 @@ export default function ResumeWindow() {
         </div>
 
         <div className={styles.main}>
-          <div className={styles.name}>Hrithik Jadhav — Resume</div>
+          <div className={styles.name}>Hrithik Jadhav - Resume</div>
           <div className={styles.meta}>
-            Master of IT (AI) · Data Analyst · Software Engineer · IT Support
+            Software Development | Data Analytics | Cloud & APIs | AI Systems
           </div>
 
           <div className={styles.actions}>
@@ -60,8 +41,6 @@ export default function ResumeWindow() {
               Download PDF
             </a>
           </div>
-
-
         </div>
       </div>
 
@@ -70,15 +49,15 @@ export default function ResumeWindow() {
         <ul className={styles.list}>
           <li>
             <span className={styles.bullet} aria-hidden="true" />
-            ML + analytics projects on GitHub (climate time-series, Airbnb analytics)
+            AWS job market analytics pipeline using Python, S3, Athena, SQL, and jobs API data.
           </li>
           <li>
             <span className={styles.bullet} aria-hidden="true" />
-            LLM code translation system (multi-agent + execution verification)
+            Public transport REST API with Flask-RESTX, SQLite, validation, pagination, and fuzzy search.
           </li>
           <li>
             <span className={styles.bullet} aria-hidden="true" />
-            Backend/API project (NBA Discord bot)
+            Multi-agent code translation system with LLM APIs, Docker, evaluation, and workflow automation.
           </li>
         </ul>
       </div>

@@ -9,12 +9,13 @@ const skillCategories = [
     subtitle: "Software Engineering fundamentals and practical tooling",
     skills: [
       "Python",
-      "JavaScript / TypeScript",
+      "JavaScript",
       "Java",
+      "C",
       "C++",
       "Git",
       "REST APIs",
-      "Data Structures & Algorithms"
+      "Modular Architecture"
     ]
   },
   {
@@ -24,11 +25,13 @@ const skillCategories = [
     skills: [
       "SQL",
       "PostgreSQL",
+      "SQLite",
       "Pandas",
       "NumPy",
+      "Power BI",
+      "Tableau",
       "Data Visualisation",
-      "Exploratory Data Analysis (EDA)",
-      "Feature Engineering"
+      "Excel"
     ]
   },
   {
@@ -51,11 +54,14 @@ const skillCategories = [
     subtitle: "Deployment-aware development and reproducibility",
     skills: [
       "Docker",
+      "AWS S3",
+      "AWS Athena",
+      "Boto3",
       "FastAPI",
+      "Flask",
+      "MongoDB",
       "Linux Basics",
-      "CI/CD Basics",
-      "MLflow (experiment tracking)",
-      "AWS / Azure (foundations)"
+      "Data Pipelines"
     ]
   },
   {
@@ -78,8 +84,10 @@ const skillCategories = [
     skills: [
       "Stakeholder Communication",
       "Agile / Team Delivery",
+      "Technical Documentation",
       "Requirements Clarification",
       "Prioritisation Under Deadlines",
+      "Systems Thinking",
       "Structured Reporting"
     ]
   }

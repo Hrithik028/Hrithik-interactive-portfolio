@@ -1,30 +1,103 @@
 .container {
-    padding: 24px;
+    padding: 20px;
     height: 100%;
     overflow-y: auto;
-    background-color: #f3f4f6;
+    background: #ece9d8;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 14px;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 /* Header */
+.header {
+    padding: 14px;
+    background: linear-gradient(to bottom, #ffffff, #f7f3df);
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
+}
 
 .header h1 {
-    font-size: 24px;
+    font-size: 25px;
     font-weight: 700;
     margin-bottom: 4px;
+    color: #111;
 }
 
 .subtitle {
-    color: #4b5563;
-    font-size: 14px;
+    color: #333;
+    font-size: 13px;
 }
 
 .status {
-    color: #2563eb;
-    font-size: 13px;
+    color: #0b58c8;
+    font-size: 12px;
     margin-top: 4px;
+    font-weight: 700;
+}
+
+.versionPill {
+    width: fit-content;
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 7px;
+    background: #dbeafe;
+    border: 1px solid #7aa7e8;
+    color: #0b3f93;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 14px;
+    padding: 14px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
+}
+
+.summary h2 {
+    margin: 0 0 6px;
+    font-size: 15px;
+}
+
+.summary p {
+    margin: 0;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.signalGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.signalGrid div {
+    padding: 9px;
+    background: #f8f8f8;
+    border: 1px solid #d2cec0;
+}
+
+.signalGrid strong,
+.signalGrid span {
+    display: block;
+}
+
+.signalGrid strong {
+    font-size: 18px;
+    color: #0b58c8;
+}
+
+.signalGrid span {
+    margin-top: 3px;
+    font-size: 11px;
+    color: #333;
 }
 
 /* Grid */
@@ -32,7 +105,7 @@
 .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 14px;
 }
 
 @media (min-width: 768px) {
@@ -45,21 +118,21 @@
 
 .card {
     background: white;
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    padding: 14px;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .card h2 {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 800;
     margin-bottom: 8px;
 }
 
 .card p {
-    font-size: 14px;
-    color: #4b5563;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5;
 }
 
 /* Skills */
@@ -72,20 +145,44 @@
 }
 
 .skillBadge {
-    background: #e5e7eb;
+    background: #f3f0de;
     padding: 4px 8px;
-    border-radius: 6px;
+    border: 1px solid #d2cec0;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.fitList {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.fitItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    color: #333;
     font-size: 12px;
+    line-height: 1.4;
+}
+
+.fitItem svg {
+    color: #2f7d16;
+    flex: 0 0 auto;
+    margin-top: 1px;
 }
 
 /* Buttons */
 
 .linkButton {
     margin-top: 12px;
-    background: none;
-    border: none;
-    color: #2563eb;
-    font-size: 13px;
+    padding: 5px 9px;
+    background: linear-gradient(to bottom, #ffffff, #ece9d8);
+    border: 1px solid #aca899;
+    color: #003c9d;
+    font-size: 12px;
+    font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -95,18 +192,19 @@
 .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 8px;
 }
 
 .primaryBtn {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    border: none;
+    padding: 7px 12px;
+    font-size: 12px;
+    border: 1px solid #aca899;
     cursor: pointer;
+    text-decoration: none;
+    font-weight: 800;
 }
 
 .github {
@@ -122,4 +220,14 @@
 .contact {
     background: #2563eb;
     color: white;
+}
+
+@media (max-width: 700px) {
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .signalGrid {
+        grid-template-columns: 1fr;
+    }
 }

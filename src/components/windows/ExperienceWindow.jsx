@@ -1,5 +1,4 @@
-import React from "react";
-import { Calendar, MapPin, Building, Award, ExternalLink } from "lucide-react";
+import { Award, Building, Calendar, ExternalLink, MapPin } from "lucide-react";
 
 import saiepBadge from "../../assets/certifications/SAIEP-badge.png";
 import saiepCert from "../../assets/certifications/SAIEP-certificate.pdf";
@@ -8,34 +7,45 @@ import styles from "../../styles/ExperienceWindow.module.css";
 
 const experiences = [
   {
-    role: "Senior Customer Service Associate",
-    company: "Sushi Train",
-    location: "Surry Hills, NSW",
-    period: "Dec 2024 – Present",
-    type: "Operations & Support",
+    role: "Research Assistant (Research Project)",
+    company: "UNSW Capstone Project",
+    location: "NSW, Australia",
+    period: "Sept 2025 - Dec 2025",
+    type: "AI Systems",
     description:
-      "Operate in a high-volume service environment, managing issue triage, incident resolution, and handovers while maintaining operational continuity.",
+      "Designed and developed an AI-enabled multi-agent system to automate code translation workflows across planning, translation, review, and validation stages.",
     achievements: [
-      "Act as first-line support, triaging high-volume requests and resolving the majority of issues within defined service expectations.",
-      "Diagnose problems under time constraints, prioritising critical incidents and escalating complex cases appropriately.",
-      "Maintain structured records of issues and resolutions to ensure accurate handovers and consistent service delivery.",
-      "Optimised team coordination workflows to reduce service delays during peak operational periods."
+      "Built modular backend pipelines to coordinate agent communication, manage workflow state, and support reliable iterative development cycles.",
+      "Integrated LLM APIs with structured testing and evaluation workflows to assess translation quality, functional correctness, and output consistency.",
+      "Applied modular design, debugging, and workflow optimisation principles to improve maintainability, performance, and overall system reliability."
     ]
   },
   {
-    role: "Student Consultant – Industry Project (SAIEP)",
-    company:
-      "UNSW – Student as Industry Engagement Program (Client: Killara Initiatives)",
-    location: "Sydney, Australia",
-    period: "Jun 2024 (2-week engagement)",
+    role: "Operations & Customer Support Associate",
+    company: "Sushi Train",
+    location: "Surry Hills, NSW",
+    period: "Dec 2024 - Present",
+    type: "Operations & Support",
+    description:
+      "Manage high-volume customer and operational requests while maintaining accuracy, service quality, and smooth team coordination.",
+    achievements: [
+      "Prioritise urgent issues, resolve problems quickly, and escalate complex matters when needed.",
+      "Maintain clear handover notes and operational records to support continuity across busy service periods.",
+      "Identify small workflow issues during peak periods and help improve day-to-day efficiency."
+    ]
+  },
+  {
+    role: "Strategy Analyst (Project Experience)",
+    company: "SAIEP - Student as Industry Engagement Program",
+    location: "NSW, Australia",
+    period: "Jun 2024 - Jul 2024",
     type: "Industry Project",
     description:
-      "Delivered a client-facing industry report analysing a real-world business challenge using structured research, analysis, and recommendation development.",
+      "Coordinated project-related requests across team members and stakeholders, clarifying requirements and tracking progress to support organised delivery.",
     achievements: [
-      "Conducted structured secondary research and competitor analysis to diagnose core operational and strategic challenges.",
-      "Synthesised research findings into evidence-based recommendations aligned with measurable business outcomes.",
-      "Collaborated in an agile-style team environment, tracking deliverables and meeting strict project deadlines.",
-      "Presented an implementation roadmap including prioritisation, risks/constraints, and execution timeline."
+      "Maintained structured documentation, updates, and issue records to improve visibility, handovers, and information accuracy.",
+      "Identified process issues early, escalated blockers when required, and followed up on actions to support timely resolution.",
+      "Supported operational improvement by troubleshooting basic access/application issues and keeping information organised and easy to use."
     ],
     evidence: [
       {
@@ -57,7 +67,8 @@ function typeVariant(type) {
   const t = String(type || "").toLowerCase();
   if (t.includes("industry")) return styles.badgeGreen;
   if (t.includes("support") || t.includes("operations")) return styles.badgeBlue;
-  return styles.badgePurple;
+  if (t.includes("ai")) return styles.badgePurple;
+  return styles.badgeNeutral;
 }
 
 function EvidenceIcon({ kind }) {
@@ -71,12 +82,15 @@ export default function ExperienceWindow() {
   return (
     <div className={styles.expWindow}>
       <div className={styles.expHeader}>
-        <h1 className={styles.expTitle}>Professional Experience</h1>
+        <div>
+          <h1 className={styles.expTitle}>Professional Experience</h1>
+          <p className={styles.expSubtitle}>Resume-backed roles across AI systems, support, and industry project delivery.</p>
+        </div>
       </div>
 
       <div className={styles.expList} role="list" aria-label="Experience list">
-        {experiences.map((exp, index) => (
-          <article key={index} className={styles.expCard} role="listitem">
+        {experiences.map((exp) => (
+          <article key={`${exp.role}-${exp.period}`} className={styles.expCard} role="listitem">
             <div className={styles.expTopRow}>
               <div className={styles.expTopLeft}>
                 <h3 className={styles.expRole}>{exp.role}</h3>
@@ -86,7 +100,6 @@ export default function ExperienceWindow() {
                 </div>
               </div>
 
-              {/* ✅ combine base badge + variant */}
               <span className={`${styles.badge} ${typeVariant(exp.type)}`}>
                 {exp.type}
               </span>
@@ -109,8 +122,8 @@ export default function ExperienceWindow() {
             <div className={styles.expAchievements}>
               <h5 className={styles.expAchievementsTitle}>Key Achievements</h5>
               <ul className={styles.expAchievementsList}>
-                {exp.achievements.map((achievement, i) => (
-                  <li key={i} className={styles.expAchievementItem}>
+                {exp.achievements.map((achievement) => (
+                  <li key={achievement} className={styles.expAchievementItem}>
                     <span className={styles.expBullet} aria-hidden="true" />
                     <span className={styles.expAchievementText}>
                       {achievement}
@@ -124,9 +137,9 @@ export default function ExperienceWindow() {
               <div className={styles.expEvidence}>
                 <h5 className={styles.expEvidenceTitle}>Credentials</h5>
                 <div className={styles.expEvidenceRow}>
-                  {exp.evidence.map((item, i) => (
+                  {exp.evidence.map((item) => (
                     <a
-                      key={i}
+                      key={item.title}
                       href={item.file}
                       target="_blank"
                       rel="noreferrer"

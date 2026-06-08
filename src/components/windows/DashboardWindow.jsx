@@ -1,31 +1,53 @@
-import { ExternalLink, Github, FileText, Mail } from "lucide-react";
+import {
+    CheckCircle2,
+    ExternalLink,
+    FileText,
+    Github,
+    Mail
+} from "lucide-react";
 import styles from "../../styles/DashboardWindow.module.css";
 
 export default function DashboardWindow({ onOpen }) {
+    const roleFit = [
+        "Software development, data analytics, cloud APIs, and AI systems",
+        "Python, SQL, AWS S3/Athena, Docker, REST APIs, Power BI, and Git",
+        "Comfortable across build, analysis, documentation, support, and stakeholder communication"
+    ];
+
     return (
         <div className={styles.container}>
-
-            {/* Header */}
             <div className={styles.header}>
                 <h1>Hrithik Jadhav</h1>
                 <div className={styles.subtitle}>
                     AI & Data Engineer | Software Developer | IT Support
                 </div>
                 <div className={styles.status}>
-                    Sydney, Australia · Open to Opportunities
+                    Sydney, Australia - Open to Opportunities
                 </div>
             </div>
 
-            {/* Grid */}
-            <div className={styles.grid}>
+            <div className={styles.summary}>
+                <div>
+                    <h2>Quick Signal</h2>
+                    <p>
+                        UNSW Master of IT graduate building useful software, data, cloud, and AI-enabled systems with
+                        a practical delivery mindset.
+                    </p>
+                </div>
+                <div className={styles.signalGrid}>
+                    <div><strong>4</strong><span>featured projects</span></div>
+                    <div><strong>2026</strong><span>completed MIT</span></div>
+                    <div><strong>AWS</strong><span>analytics pipeline</span></div>
+                </div>
+            </div>
 
-                {/* Featured Project */}
+            <div className={styles.grid}>
                 <div className={styles.card}>
                     <h2>Featured Project</h2>
-                    <strong>Multi-Agent LLM Code Translation System</strong>
+                    <strong>AWS Job Market Skills Analytics Pipeline</strong>
                     <p>
-                        Execution-verified Python → Java translation using planning,
-                        AST analysis, and automated repair loops (UNSW Capstone).
+                        Python ETL pipeline using S3, Athena, SQL, and jobs API data to analyse
+                        Australian tech skill demand across software, data, cloud, and support roles.
                     </p>
 
                     <button
@@ -36,18 +58,23 @@ export default function DashboardWindow({ onOpen }) {
                     </button>
                 </div>
 
-                {/* Skills */}
                 <div className={styles.card}>
-                    <h2>Core Stack</h2>
+                    <h2>Role Fit</h2>
+                    <div className={styles.fitList}>
+                        {roleFit.map((item) => (
+                            <div key={item} className={styles.fitItem}>
+                                <CheckCircle2 size={15} />
+                                <span>{item}</span>
+                            </div>
+                        ))}
+                    </div>
 
                     <div className={styles.skills}>
-                        {["Python", "Java", "React", "SQL", "PyTorch", "Docker"].map(
-                            (skill) => (
-                                <span key={skill} className={styles.skillBadge}>
-                                    {skill}
-                                </span>
-                            )
-                        )}
+                        {["Python", "Java", "React", "SQL", "PyTorch", "Docker"].map((skill) => (
+                            <span key={skill} className={styles.skillBadge}>
+                                {skill}
+                            </span>
+                        ))}
                     </div>
 
                     <button
@@ -59,7 +86,6 @@ export default function DashboardWindow({ onOpen }) {
                 </div>
             </div>
 
-            {/* Actions */}
             <div className={styles.actions}>
                 <a
                     href="https://github.com/Hrithik028"

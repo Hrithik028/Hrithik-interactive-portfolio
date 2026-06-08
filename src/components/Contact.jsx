@@ -1,5 +1,5 @@
 import React from "react";
-import { Github, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import styles from "../styles/Contact.module.css";
 
 /**
@@ -10,12 +10,6 @@ import styles from "../styles/Contact.module.css";
  * If you're building a Windows-OS portfolio, you'll mostly use: variant="window"
  */
 export default function Contact({ variant = "window" }) {
-  const onSubmit = (e) => {
-    e.preventDefault();
-    alert("Message sending is not wired up yet.");
-  };
-
-  // TODO: replace with real info
   const email = "hrithik.jadhav028@gmail.com";
   const phoneDisplay = "+61 434 381 283";
   const phoneE164 = "+61434381283";
@@ -109,84 +103,6 @@ export default function Contact({ variant = "window" }) {
     </div>
   );
 
-  const ContactForm = ({ compact = false }) => (
-    <div className={compact ? styles.formCardCompact : styles.formCard}>
-      <h3 className={compact ? styles.titleSm : styles.titleMd}>Send a Message</h3>
-
-      <form
-        className={compact ? styles.formCompact : styles.form}
-        onSubmit={onSubmit}
-      >
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor={`name-${variant}`}>
-            {compact ? "Name" : "Full Name"}
-          </label>
-          <input
-            className={compact ? styles.inputCompact : styles.input}
-            id={`name-${variant}`}
-            type="text"
-            placeholder={compact ? "Your name" : "Your full name"}
-            autoComplete="name"
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor={`email-${variant}`}>
-            Email
-          </label>
-          <input
-            className={compact ? styles.inputCompact : styles.input}
-            id={`email-${variant}`}
-            type="email"
-            placeholder="your.email@example.com"
-            autoComplete="email"
-          />
-        </div>
-
-        {!compact && (
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor={`subject-${variant}`}>
-              Subject
-            </label>
-            <input
-              className={styles.input}
-              id={`subject-${variant}`}
-              type="text"
-              placeholder="Opportunity discussion"
-            />
-          </div>
-        )}
-
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor={`message-${variant}`}>
-            Message
-          </label>
-          <textarea
-            className={compact ? styles.textareaCompact : styles.textarea}
-            id={`message-${variant}`}
-            rows={compact ? 3 : 4}
-            placeholder={compact ? "Your message..." : "Tell me about the opportunity..."}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className={`${styles.button} ${styles.buttonBlue} ${styles.buttonFull} ${compact ? styles.buttonCompact : ""
-            }`}
-        >
-          {compact ? (
-            <>
-              <Send className={styles.buttonIcon} />
-              Send Message
-            </>
-          ) : (
-            "Send Message"
-          )}
-        </button>
-      </form>
-    </div>
-  );
-
   // WINDOW VARIANT (best for your OS-portfolio)
   if (variant === "window") {
     return (
@@ -198,7 +114,6 @@ export default function Contact({ variant = "window" }) {
         <div className={styles.windowBody}>
           <ContactInfoCard compact />
           <SocialLinks compact />
-          <ContactForm compact />
         </div>
       </div>
     );
@@ -221,7 +136,6 @@ export default function Contact({ variant = "window" }) {
             <SocialLinks />
           </div>
 
-          <ContactForm />
         </div>
       </div>
     </section>

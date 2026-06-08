@@ -1,16 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { ASSETS } from "../config/assets";
-
-import styles from "../styles/LoginScreen.module.css";
-// import profilephoto from "../assets/icons/profile_pic2.jpeg";
-// import xpLogo from "../assets/icons/windows logo.png";
 import { ChevronRight } from "lucide-react";
+import { ASSETS } from "../config/assets";
+import styles from "../styles/LoginScreen.module.css";
 
 const hints = [
     "Tip: Double-click icons to open windows.",
-    "Tip: Try the Recycle Bin for easter eggs.",
+    "Tip: Right-click the desktop for shortcuts.",
     "Tip: Press Enter to log in.",
-    "Tip: Your portfolio is an OS now.",
+    "Tip: Your portfolio is an OS now."
 ];
 
 export default function LoginScreen({ onLogin }) {
@@ -18,8 +15,6 @@ export default function LoginScreen({ onLogin }) {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [showSwitch, setShowSwitch] = useState(false);
-
-    // Profile selection shouldn't change the visible name
     const [profileMode, setProfileMode] = useState("Hrithik");
 
     const hint = useMemo(() => hints[Math.floor(Math.random() * hints.length)], []);
@@ -28,7 +23,7 @@ export default function LoginScreen({ onLogin }) {
         setError("");
 
         if (password.trim().toLowerCase() === "admin") {
-            setError("Nice try 😄 (Hint: you don’t need a password)");
+            setError("Nice try :) (Hint: you do not need a password)");
             return;
         }
 
@@ -52,13 +47,12 @@ export default function LoginScreen({ onLogin }) {
             <div className={styles.bg} />
 
             <div className={styles.topBar}>
-                <div className={styles.topTitle}>Windows XP</div>
+                <div className={styles.topTitle}>Windows XP Portfolio</div>
                 <div className={styles.topHint}>{hint}</div>
             </div>
 
             <div className={styles.centerWrap}>
                 <div className={styles.split}>
-                    {/* Left panel (branding) */}
                     <div className={styles.leftPane}>
                         <div className={styles.brandBlock}>
                             <img
@@ -70,14 +64,12 @@ export default function LoginScreen({ onLogin }) {
                         </div>
 
                         <div className={styles.leftMessage}>
-                            Welcome to Hrithik’s Windows XP Style Portfolio
+                            Welcome to Hrithik's Windows XP Style Portfolio
                         </div>
                     </div>
 
-                    {/* Divider */}
                     <div className={styles.divider} aria-hidden="true" />
 
-                    {/* Right panel (your current login card UI) */}
                     <div className={styles.rightPane}>
                         <div className={styles.card}>
                             <div className={styles.avatarTile}>
@@ -139,7 +131,7 @@ export default function LoginScreen({ onLogin }) {
                                     <div className={styles.panelHeader}>Choose profile</div>
                                     <div className={styles.panelBody}>
                                         <div className={styles.panelDesc}>
-
+                                            Recruiter mode opens the fast-scan dashboard first.
                                         </div>
 
                                         <div className={styles.panelGrid}>
@@ -176,7 +168,7 @@ export default function LoginScreen({ onLogin }) {
             </div>
 
             <div className={styles.bottomBar}>
-                <div className={styles.bottomText}>Log on to “Hrithik OS”</div>
+                <div className={styles.bottomText}>Log on to "Hrithik OS"</div>
 
                 <button type="button" className={styles.shutdownBtn} onClick={() => window.location.reload()}>
                     Shut Down

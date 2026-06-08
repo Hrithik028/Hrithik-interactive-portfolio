@@ -12,6 +12,7 @@ export default function BootScreen({ onComplete }) {
 
     const [visibleSteps, setVisibleSteps] = useState([]);
     const [dots, setDots] = useState("");
+    const [exiting, setExiting] = useState(false);
 
     // Step-by-step loading
     useEffect(() => {
@@ -30,8 +31,11 @@ export default function BootScreen({ onComplete }) {
                 clearInterval(stepInterval);
 
                 setTimeout(() => {
-                    if (onComplete) onComplete();
-                }, 800);
+                    setExiting(true);
+                    setTimeout(() => {
+                        if (onComplete) onComplete();
+                    }, 1500);
+                }, 650);
             }
         }, 500);
 
@@ -48,7 +52,7 @@ export default function BootScreen({ onComplete }) {
     }, []);
 
     return (
-        <div className={styles.backdrop}>
+        <div className={`${styles.backdrop} ${exiting ? styles.backdropDone : ""}`}>
             <div className={styles.panel}>
                 <div className={styles.terminal}>
                     <div>[ System Booting ]</div>

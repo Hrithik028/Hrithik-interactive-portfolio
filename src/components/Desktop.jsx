@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { ASSETS } from "../config/assets";
+import styles from "../styles/Desktop.module.css";
+import assistantIcon from "../assets/icons/Assistant.png";
 
 import Taskbar from "./Taskbar";
 import Window from "./Window";
 
-import AboutWindow from "./windows/AboutWindow";
-import ProjectsWindow from "./windows/ProjectsWindow";
-import SkillsWindow from "./windows/SkillsWindow";
-import ResearchWindow from "./windows/ResearchWindow";
-import ContactWindow from "./Contact";
-import ResumeWindow from "./windows/ResumeWindow";
-/*import CertificationsWindow from "./windows/CertificationsWindow";*/
-import ExperienceWindow from "./windows/ExperienceWindow";
-import DashboardWindow from "./windows/DashboardWindow";
+const AboutWindow = lazy(() => import("./windows/AboutWindow"));
+const ProjectsWindow = lazy(() => import("./windows/ProjectsWindow"));
+const SkillsWindow = lazy(() => import("./windows/SkillsWindow"));
+const ResearchWindow = lazy(() => import("./windows/ResearchWindow"));
+const ContactWindow = lazy(() => import("./Contact"));
+const ResumeWindow = lazy(() => import("./windows/ResumeWindow"));
+const ExperienceWindow = lazy(() => import("./windows/ExperienceWindow"));
+const DashboardWindow = lazy(() => import("./windows/DashboardWindow"));
 
 const wallpaper = ASSETS.images.wallpaper
 
@@ -88,34 +89,56 @@ function getViewportMode() {
   return "desktop";
 }
 
-// --- Recruiter preset layout (tweak these numbers to match your screen) ---
-function computeSmallThreeWindowPreset(vw, vh, taskbarHeight) {
-  const H = vh - taskbarHeight;
-  const m = 14;
+function computeRecruiterPreset(vw, vh, taskbarHeight, viewportMode) {
+  const availableH = vh - taskbarHeight;
+  const gap = viewportMode === "mobile" ? 10 : 14;
+  const open = ["dashboard", "projects", "experience"];
 
-  const winH = Math.floor(H * 0.86);
+  if (viewportMode === "mobile") {
+    const w = vw - gap * 2;
+    const h = Math.max(340, Math.min(520, Math.floor(availableH * 0.62)));
 
-  const aboutW = Math.min(520, Math.floor(vw * 0.3));
-  const projectsW = Math.min(760, Math.floor(vw * 0.44));
-  const skillsW = Math.max(420, vw - aboutW - projectsW - m * 4);
+    return {
+      open,
+      active: "dashboard",
+      frames: {
+        dashboard: { x: gap, y: gap, w, h },
+        projects: { x: gap, y: h + gap * 2, w, h },
+        experience: { x: gap, y: h * 2 + gap * 3, w, h },
+      },
+      mobileStack: true,
+    };
+  }
 
-  const aboutX = m;
-  const aboutY = m;
+  if (viewportMode === "tablet") {
+    const topH = Math.floor((availableH - gap * 3) * 0.46);
+    const bottomH = availableH - topH - gap * 3;
+    const halfW = Math.floor((vw - gap * 3) / 2);
 
-  const projectsX = aboutX + aboutW + m;
-  const projectsY = m;
+    return {
+      open,
+      active: "dashboard",
+      frames: {
+        dashboard: { x: gap, y: gap, w: vw - gap * 2, h: topH },
+        projects: { x: gap, y: topH + gap * 2, w: halfW, h: bottomH },
+        experience: { x: halfW + gap * 2, y: topH + gap * 2, w: halfW, h: bottomH },
+      },
+      mobileStack: false,
+    };
+  }
 
-  const skillsX = projectsX + projectsW + m;
-  const skillsY = m;
+  const w = Math.floor((vw - gap * 4) / 3);
+  const h = Math.floor(availableH * 0.86);
 
   return {
-    open: ["about", "projects", "skills"],
-    active: "projects",
+    open,
+    active: "dashboard",
     frames: {
-      about: { x: aboutX, y: aboutY, w: aboutW, h: winH },
-      projects: { x: projectsX, y: projectsY, w: projectsW, h: winH },
-      skills: { x: skillsX, y: skillsY, w: skillsW, h: winH },
+      dashboard: { x: gap, y: gap, w, h },
+      projects: { x: w + gap * 2, y: gap, w, h },
+      experience: { x: w * 2 + gap * 3, y: gap, w, h },
     },
+    mobileStack: false,
   };
 }
 
@@ -132,6 +155,11 @@ export default function Desktop({ session, onLogout }) {
   const [winState, setWinState] = useState({});
   const [frames, setFrames] = useState({});
   const [viewport, setViewport] = useState(() => getViewportMode());
+  const [selectedIcon, setSelectedIcon] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null);
+  const [assistantOpen, setAssistantOpen] = useState(true);
+  const [recruiterStackMode, setRecruiterStackMode] = useState(false);
+  const [desktopTime, setDesktopTime] = useState(() => new Date());
 
   const isMobile = viewport === "mobile";
   const isTablet = viewport === "tablet";
@@ -155,6 +183,11 @@ export default function Desktop({ session, onLogout }) {
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setDesktopTime(new Date()), 1000);
+    return () => window.clearInterval(timer);
   }, []);
 
   useEffect(() => {
@@ -193,7 +226,7 @@ export default function Desktop({ session, onLogout }) {
       const next = { ...prev };
 
       for (const id of openWindows) {
-        if (isMobile) {
+        if (isMobile && !recruiterStackMode) {
           next[id] = {
             ...(next[id] ?? {}),
             x: 0,
@@ -212,7 +245,7 @@ export default function Desktop({ session, onLogout }) {
 
       return next;
     });
-  }, [viewport, openWindows, taskbarHeight, isMobile]);
+  }, [viewport, openWindows, taskbarHeight, isMobile, recruiterStackMode]);
 
   // const taskbarHeight = isMobile
   //  ? MOBILE_TASKBAR_HEIGHT
@@ -221,30 +254,24 @@ export default function Desktop({ session, onLogout }) {
   useEffect(() => {
     if (!isRecruiterMode) return;
 
-    setOpenWindows((prev) => (prev.length ? prev : ["dashboard"]));
-    setActiveWindow((prev) => prev ?? "dashboard");
-    setWinState((prev) => ({
-      ...prev,
-      dashboard: prev.dashboard ?? { minimized: false, maximized: false },
-    }));
+    const preset = computeRecruiterPreset(
+      window.innerWidth,
+      window.innerHeight,
+      taskbarHeight,
+      viewport
+    );
 
-    setFrames((prev) => {
-      if (prev.dashboard) return prev;
-
-      const vw = window.innerWidth;
-      const vh = window.innerHeight - taskbarHeight;
-
-      const w = Math.min(920, Math.floor(vw * 0.62));
-      const h = Math.min(640, Math.floor(vh * 0.72));
-      const x = Math.max(12, Math.floor((vw - w) / 2));
-      const y = Math.max(12, Math.floor((vh - h) / 2));
-
-      return {
-        ...prev,
-        dashboard: { x, y, w, h },
-      };
-    });
-  }, [isRecruiterMode, taskbarHeight]);
+    setOpenWindows(preset.open);
+    setActiveWindow(preset.active);
+    setWinState(
+      Object.fromEntries(
+        preset.open.map((id) => [id, { minimized: false, maximized: false }])
+      )
+    );
+    setFrames(preset.frames);
+    setRecruiterStackMode(preset.mobileStack);
+    setHasShownPreset(true);
+  }, [isRecruiterMode, taskbarHeight, viewport]);
 
   const ensureFrame = (windowId, index = 0) => {
     setFrames((prev) => {
@@ -290,7 +317,30 @@ export default function Desktop({ session, onLogout }) {
     });
   };
 
+  const applyRecruiterLayout = () => {
+    const preset = computeRecruiterPreset(
+      window.innerWidth,
+      window.innerHeight,
+      taskbarHeight,
+      viewport
+    );
+
+    setOpenWindows(preset.open);
+    setActiveWindow(preset.active);
+    setWinState(
+      Object.fromEntries(
+        preset.open.map((id) => [id, { minimized: false, maximized: false }])
+      )
+    );
+    setFrames(preset.frames);
+    setRecruiterStackMode(preset.mobileStack);
+    setHasShownPreset(true);
+  };
+
   const openWindow = (windowId) => {
+    setContextMenu(null);
+    setSelectedIcon(windowId);
+
     if (isMobile) {
       setOpenWindows((prev) => (prev.includes(windowId) ? prev : [...prev, windowId]));
       setWinState((prev) => ({
@@ -359,10 +409,11 @@ export default function Desktop({ session, onLogout }) {
         return;
       }
 
-      const preset = computeSmallThreeWindowPreset(
+      const preset = computeRecruiterPreset(
         window.innerWidth,
         window.innerHeight,
-        taskbarHeight
+        taskbarHeight,
+        viewport
       );
 
       setOpenWindows(preset.open);
@@ -375,6 +426,7 @@ export default function Desktop({ session, onLogout }) {
 
       setWinState(nextState);
       setFrames(preset.frames);
+      setRecruiterStackMode(preset.mobileStack);
       setHasShownPreset(true);
       return;
     }
@@ -481,6 +533,45 @@ export default function Desktop({ session, onLogout }) {
 
   const hasVisibleMobileWindow = isMobile && activeWindowVisible;
   const showMobileHome = isMobile && !hasVisibleMobileWindow;
+  const seconds = desktopTime.getSeconds();
+  const minutes = desktopTime.getMinutes();
+  const hours = desktopTime.getHours() % 12;
+  const secondAngle = seconds * 6;
+  const minuteAngle = minutes * 6 + seconds * 0.1;
+  const hourAngle = hours * 30 + minutes * 0.5;
+  const clockNumbers = Array.from({ length: 12 }, (_, index) => {
+    const value = index + 1;
+    const angle = value * 30;
+
+    return {
+      value,
+      x: 50 + Math.sin((angle * Math.PI) / 180) * 38,
+      y: 50 - Math.cos((angle * Math.PI) / 180) * 38,
+    };
+  });
+
+  const assistantItems = [
+    {
+      id: "dashboard",
+      title: "Start Here",
+      body: "Fast recruiter overview, role fit, and direct actions."
+    },
+    {
+      id: "projects",
+      title: "See Proof",
+      body: "AWS analytics, public transport API, AI systems, and geospatial work."
+    },
+    {
+      id: "experience",
+      title: "Work History",
+      body: "Research assistant, operations support, and SAIEP project experience."
+    },
+    {
+      id: "contact",
+      title: "Contact",
+      body: "Email, LinkedIn, GitHub, and message form."
+    }
+  ];
 
 
   const renderWindows = () =>
@@ -494,7 +585,7 @@ export default function Desktop({ session, onLogout }) {
       };
 
       if (state.minimized) return null;
-      if (isMobile && activeWindow !== windowId) return null;
+      if (isMobile && !recruiterStackMode && activeWindow !== windowId) return null;
 
       const frame = frames[windowId] ?? {
         x: 100 + index * 30,
@@ -502,14 +593,6 @@ export default function Desktop({ session, onLogout }) {
         w: 600,
         h: 500,
       };
-
-      console.log("rendering window", {
-      windowId,
-      isMobile,
-      activeWindow,
-      state,
-      frame,
-    });
 
       const WindowComponent = iconData.component;
 
@@ -520,7 +603,8 @@ export default function Desktop({ session, onLogout }) {
           isActive={activeWindow === windowId}
           isMinimized={state.minimized}
           isMaximized={state.maximized}
-          isMobile={isMobile}
+          isMobile={isMobile && !recruiterStackMode}
+          isStackedMobile={isMobile && recruiterStackMode}
           taskbarHeight={taskbarHeight}
           onClose={() => closeWindow(windowId)}
           onFocus={() => focusWindow(windowId)}
@@ -528,8 +612,11 @@ export default function Desktop({ session, onLogout }) {
           onToggleMaximize={() => toggleMaximize(windowId)}
           initialPosition={{ x: frame.x, y: frame.y }}
           initialSize={{ w: frame.w, h: frame.h }}
+          titleIconSrc={iconData.iconSrc}
         >
-          <WindowComponent onOpen={openWindow} />
+          <Suspense fallback={<div className={styles.loadingWindow}>Loading...</div>}>
+            <WindowComponent onOpen={openWindow} />
+          </Suspense>
         </Window>
       );
     });
@@ -547,7 +634,7 @@ export default function Desktop({ session, onLogout }) {
             onClick={() => openWindow(icon.id)}
             onDoubleClick={() => openWindow(icon.id)}
           >
-            <div className="flex flex-col items-center px-1 py-1 rounded-md hover:bg-white/15 active:bg-white/20 transition">
+            <div className={`flex flex-col items-center px-1 py-1 rounded-md hover:bg-white/15 active:bg-white/20 transition ${selectedIcon === icon.id ? "bg-white/20 outline outline-1 outline-white/40" : ""}`}>
               <img
                 src={icon.iconSrc}
                 alt={icon.label}
@@ -561,6 +648,100 @@ export default function Desktop({ session, onLogout }) {
         ))}
       </div>
 
+      {contextMenu && (
+        <div
+          className={styles.contextMenu}
+          style={{ left: contextMenu.x, top: contextMenu.y }}
+          onMouseLeave={() => setContextMenu(null)}
+        >
+          <button type="button" onClick={applyRecruiterLayout}>
+            Open Recruiter Layout
+          </button>
+          <button type="button" onClick={() => openWindow("dashboard")}>
+            Open Dashboard
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedIcon(null);
+              setContextMenu(null);
+            }}
+          >
+            Refresh Desktop
+          </button>
+        </div>
+      )}
+
+      <div className={styles.analogClock} data-desktop-context="ignore" title="System clock">
+        <div className={styles.clockFace}>
+          {clockNumbers.map((number) => (
+            <span
+              key={number.value}
+              className={styles.clockNumber}
+              style={{
+                left: `${number.x}%`,
+                top: `${number.y}%`,
+              }}
+            >
+              {number.value}
+            </span>
+          ))}
+          <span
+            className={`${styles.clockHand} ${styles.clockHour}`}
+            style={{ transform: `translateX(-50%) rotate(${hourAngle}deg)` }}
+          />
+          <span
+            className={`${styles.clockHand} ${styles.clockMinute}`}
+            style={{ transform: `translateX(-50%) rotate(${minuteAngle}deg)` }}
+          />
+          <span
+            className={`${styles.clockHand} ${styles.clockSecond}`}
+            style={{ transform: `translateX(-50%) rotate(${secondAngle}deg)` }}
+          />
+          <span className={styles.clockPin} />
+        </div>
+      </div>
+
+      <div
+        className={`${styles.assistant} ${assistantOpen ? styles.assistantOpen : styles.assistantClosed}`}
+        data-desktop-context="ignore"
+      >
+        <button
+          type="button"
+          className={styles.assistantToggle}
+          onClick={() => setAssistantOpen((prev) => !prev)}
+          title={assistantOpen ? "Hide assistant" : "Show assistant"}
+        >
+          <img src={assistantIcon} alt="" className={styles.assistantToggleIcon} draggable="false" />
+        </button>
+
+        {assistantOpen && (
+          <div className={styles.assistantBody}>
+            <div className={styles.assistantHeader}>
+              <img src={assistantIcon} alt="" draggable="false" />
+              <div>
+                <strong>Portfolio Assistant</strong>
+                <span>Pick a route</span>
+              </div>
+            </div>
+
+            <div className={styles.assistantList}>
+              {assistantItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={styles.assistantItem}
+                  onClick={() => openWindow(item.id)}
+                >
+                  <span>{item.title}</span>
+                  <small>{item.body}</small>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
       {renderWindows()}
 
       <Taskbar
@@ -569,6 +750,10 @@ export default function Desktop({ session, onLogout }) {
         activeWindow={activeWindow}
         onWindowClick={handleTaskbarClick}
         isMobile={false}
+        shortcuts={desktopIcons}
+        onShortcutClick={openWindow}
+        onOpenAll={applyRecruiterLayout}
+        profileImage={ASSETS.images.profile}
       />
     </>
   );
@@ -606,12 +791,27 @@ export default function Desktop({ session, onLogout }) {
         activeWindow={activeWindow}
         onWindowClick={handleTaskbarClick}
         isMobile={true}
+        shortcuts={desktopIcons}
+        onShortcutClick={openWindow}
+        onOpenAll={applyRecruiterLayout}
+        profileImage={ASSETS.images.profile}
       />
     </>
   );
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative bg-black">
+    <div
+      className={`h-screen w-screen relative bg-black ${recruiterStackMode ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden"}`}
+      onClick={() => setContextMenu(null)}
+      onContextMenu={(event) => {
+        if (event.target?.closest?.('[data-desktop-context="ignore"]')) return;
+        event.preventDefault();
+        setContextMenu({
+          x: Math.min(event.clientX, window.innerWidth - 220),
+          y: Math.min(event.clientY, window.innerHeight - taskbarHeight - 150),
+        });
+      }}
+    >
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
         style={{ backgroundImage: `url(${wallpaper})` }}
