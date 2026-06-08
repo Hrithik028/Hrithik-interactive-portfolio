@@ -1,16 +1,22 @@
 .container {
     height: 100%;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
+    background: #ece9d8;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 .header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .title {
     margin: 0 0 6px 0;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #111827;
 }
@@ -26,17 +32,17 @@
     display: flex;
     gap: 14px;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    border: 1px solid #aca899;
     padding: 16px;
+    box-shadow: inset 1px 1px #fff;
     align-items: flex-start;
 }
 
 .iconBox {
     width: 54px;
     height: 54px;
-    border-radius: 12px;
     background: #dbeafe;
+    border: 1px solid #7aa7e8;
     display: grid;
     place-items: center;
     flex: 0 0 auto;
@@ -82,7 +88,7 @@
     font-size: 13px;
     font-weight: 750;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 8px 12px;
     border: 1px solid transparent;
     cursor: pointer;
@@ -114,7 +120,7 @@
     gap: 8px;
     font-size: 13px;
     font-weight: 750;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 8px 12px;
     background: transparent;
     border: 1px dashed #cbd5e1;
@@ -136,9 +142,9 @@
 .highlights {
     margin-top: 16px;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    border: 1px solid #aca899;
     padding: 16px;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .sectionTitle {
@@ -164,7 +170,6 @@
     display: inline-block;
     width: 7px;
     height: 7px;
-    border-radius: 999px;
     background: #2563eb;
     margin-right: 10px;
     transform: translateY(-1px);

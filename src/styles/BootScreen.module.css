@@ -12,10 +12,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    will-change: opacity, filter;
 }
 
 .backdropDone {
-    animation: fadeOut 180ms ease-in forwards;
+    animation: fadeOut 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes fadeIn {
@@ -29,7 +30,33 @@
 }
 
 @keyframes fadeOut {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    55% {
+        opacity: 0.72;
+        filter: blur(1px);
+    }
+
     to {
+        opacity: 0;
+        filter: blur(8px);
+    }
+}
+
+.backdropDone .panel {
+    animation: panelDrift 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes panelDrift {
+    45% {
+        opacity: 0.9;
+    }
+
+    to {
+        transform: translateY(-18px) scale(0.975);
         opacity: 0;
     }
 }

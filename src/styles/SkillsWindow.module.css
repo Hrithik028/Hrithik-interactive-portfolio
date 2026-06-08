@@ -1,16 +1,22 @@
 .container {
     height: 100%;
-    padding: 24px;
+    padding: 18px;
     box-sizing: border-box;
+    background: #ece9d8;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 .header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .title {
     margin: 0 0 6px 0;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #111827;
 }
@@ -30,7 +36,8 @@
 
     overflow-y: auto;
     max-height: calc(100% - 70px);
-    padding-right: 6px;
+    padding: 0 6px 32px 0;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
@@ -40,10 +47,10 @@
 }
 
 .card {
-    background: #f9fafb;
-    border: 1px solid #eef2f7;
-    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #aca899;
     padding: 14px;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .cardHeader {
@@ -57,8 +64,8 @@
 .iconBox {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
     background: #dbeafe;
+    border: 1px solid #7aa7e8;
     display: grid;
     place-items: center;
     flex: 0 0 auto;
@@ -98,11 +105,11 @@
 .skillPill {
     font-size: 12px;
     padding: 6px 10px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 999px;
+    background: #f3f0de;
+    border: 1px solid #d2cec0;
     color: #374151;
     line-height: 1;
+    font-weight: 700;
 }
 
 /* Scrollbar */

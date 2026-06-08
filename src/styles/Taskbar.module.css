@@ -151,33 +151,81 @@
     position: absolute;
     left: 0;
     bottom: 32px;
-    width: 220px;
-    padding: 6px;
-    background: linear-gradient(to bottom, #f7fbff, #d9ecff);
-    border: 1px solid #8cc6ff;
-    border-radius: 6px;
+    width: 258px;
+    padding: 0 6px 6px;
+    background: #ece9d8;
+    border: 1px solid #0a246a;
+    border-radius: 0 6px 6px 0;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.startHeader {
+    margin: 0 -6px 6px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    background: linear-gradient(to bottom, #2f79e7, #0d44aa);
+}
+
+.startAvatar {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 4px;
+}
+
+.startAvatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.startName {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.startVersion {
+    margin-top: 2px;
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.menuSection {
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #c7c3b2;
+    max-height: 248px;
+    overflow-y: auto;
 }
 
 .menuItem {
     width: 100%;
-    height: 34px;
-    padding: 0 10px;
+    height: 30px;
+    padding: 0 8px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: linear-gradient(to bottom, #ffffff, #eaeaea);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 6px;
-    font-size: 13px;
+    gap: 8px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font-size: 12px;
     font-weight: 600;
-    color: #111827;
+    color: #111;
     cursor: pointer;
 }
 
 .menuItem:hover {
-    border-color: #5aa8ff;
-    background: linear-gradient(to bottom, #ffffff, #dff0ff);
+    background: #316ac5;
+    color: #fff;
 }
 
 .menuItem:active {
@@ -187,6 +235,13 @@
 .menuIcon {
     width: 16px;
     height: 16px;
+    flex: 0 0 auto;
+}
+
+.menuIconImg {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
     flex: 0 0 auto;
 }
 

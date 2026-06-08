@@ -2,7 +2,7 @@
     --bg: #f9fafb;
     --text: #111827;
     --muted: #6b7280;
-    --border: #e5e7eb;
+    --border: #aca899;
     --white: #ffffff;
 
     --blue: #2563eb;
@@ -13,16 +13,16 @@
 
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 
-    --r-lg: 12px;
-    --r-md: 10px;
-    --r-sm: 8px;
+    --r-lg: 0;
+    --r-md: 0;
+    --r-sm: 0;
 }
 
 /* ---------- shared primitives ---------- */
 
 .windowWrap,
 .section {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family: Tahoma, Arial, sans-serif;
     color: var(--text);
 }
 
@@ -85,9 +85,10 @@
 /* ---------- cards ---------- */
 
 .cardSoft {
-    background: #f3f4f6;
+    background: #ffffff;
     padding: 16px;
-    border-radius: var(--r-md);
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .formCard {
@@ -101,8 +102,8 @@
 .formCardCompact {
     background: var(--white);
     padding: 16px;
-    border-radius: var(--r-md);
     border: 1px solid var(--border);
+    box-shadow: inset 1px 1px #fff;
 }
 
 /* ---------- buttons ---------- */
@@ -119,8 +120,8 @@
     justify-content: center;
     gap: 10px;
     padding: 12px 16px;
-    border-radius: var(--r-md);
-    border: 0;
+    border-radius: 0;
+    border: 1px solid #aca899;
     cursor: pointer;
     text-decoration: none;
     font-weight: 600;
@@ -227,7 +228,7 @@
 .textarea {
     width: 100%;
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: 0;
     padding: 12px 14px;
     font-size: 14px;
     color: var(--text);
@@ -239,7 +240,7 @@
 .inputCompact {
     width: 100%;
     border: 1px solid var(--border);
-    border-radius: var(--r-sm);
+    border-radius: 0;
     padding: 10px 12px;
     font-size: 13px;
     color: var(--text);
@@ -256,7 +257,7 @@
 .textareaCompact {
     width: 100%;
     border: 1px solid var(--border);
-    border-radius: var(--r-sm);
+    border-radius: 0;
     padding: 10px 12px;
     font-size: 13px;
     color: var(--text);
@@ -278,19 +279,24 @@
 /* ---------- window variant ---------- */
 
 .windowWrap {
-    padding: 24px;
+    padding: 18px;
     height: 100%;
+    background: #ece9d8;
 }
 
 .windowHeader {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #aca899;
+    box-shadow: inset 1px 1px #fff;
 }
 
 .windowTitle {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 800;
     margin: 0;
     color: var(--text);
 }
@@ -300,6 +306,8 @@
     flex-direction: column;
     gap: 20px;
     overflow-y: auto;
+    padding-bottom: 32px;
+    box-sizing: border-box;
 }
 
 /* ---------- section variant ---------- */

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Minus, Square, HelpCircle } from "lucide-react";
+import { X, Minus, Square } from "lucide-react";
 import styles from "../styles/Window.module.css";
 
  // const maxY = Math.max(0, window.innerHeight - taskbarHeight - h); // must match Taskbar height (h-8)
@@ -11,6 +11,7 @@ export default function Window({
   isMinimized,
   isMaximized,
   isMobile = false,
+  isStackedMobile = false,
   taskbarHeight = 32,
   onClose,
   onFocus,
@@ -18,6 +19,7 @@ export default function Window({
   onToggleMaximize,
   initialPosition,
   initialSize,
+  titleIconSrc,
 }) {
   // Hooks must run on every render
   const [position, setPosition] = useState(initialPosition);
@@ -105,7 +107,7 @@ export default function Window({
         top: position.y,
         width: `${size.w}px`,
         height: `${size.h}px`,
-        minWidth: "320px",
+        minWidth: isStackedMobile ? "0" : "320px",
         minHeight: "300px",
       };
 
@@ -129,6 +131,7 @@ export default function Window({
   return (
     <div
       ref={windowRef}
+      data-desktop-context="ignore"
       className={`${styles.window} ${isMobile ? styles.mobileWindow : ""} ${isActive ? styles.active : styles.inactive}`}
       style={rootStyle}
       onMouseDown={onFocus}
@@ -145,7 +148,9 @@ export default function Window({
       >
         <div className={styles.left}>
           <div className={styles.titleIcon} aria-hidden="true">
-            <HelpCircle className={styles.helpIcon} />
+            {titleIconSrc ? (
+              <img src={titleIconSrc} alt="" className={styles.titleIconImg} draggable="false" />
+            ) : null}
           </div>
           <span
             className={`${styles.titleText} ${isMobile ? styles.titleTextMobile : ""}`}

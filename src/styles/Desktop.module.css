@@ -1,0 +1,227 @@
+.contextMenu {
+    position: absolute;
+    z-index: 180;
+    width: 210px;
+    padding: 3px;
+    background: #ece9d8;
+    border: 1px solid #0a246a;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.28);
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+.contextMenu button {
+    width: 100%;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    padding: 0 22px 0 8px;
+    border: 0;
+    background: transparent;
+    color: #111;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.contextMenu button:hover {
+    background: #316ac5;
+    color: #fff;
+}
+
+.analogClock {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 18;
+    width: 84px;
+    height: 84px;
+    font-family: Tahoma, Arial, sans-serif;
+    pointer-events: none;
+    background: transparent;
+}
+
+.clockFace {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(245, 241, 220, 0.18) 72%, rgba(212, 208, 189, 0.08) 100%);
+    border: 1px solid rgba(127, 123, 109, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.clockNumber {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: #111;
+    font-size: 8px;
+    font-weight: 800;
+    line-height: 1;
+    user-select: none;
+}
+
+.clockHand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: 50% 100%;
+    border-radius: 999px;
+}
+
+.clockHour {
+    width: 4px;
+    height: 24px;
+    background: #111;
+}
+
+.clockMinute {
+    width: 3px;
+    height: 34px;
+    background: #003c9d;
+}
+
+.clockSecond {
+    width: 1px;
+    height: 36px;
+    background: #c01818;
+}
+
+.clockPin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #003c9d;
+    border: 1px solid #fff;
+}
+
+.assistant {
+    position: absolute;
+    right: 14px;
+    bottom: 46px;
+    z-index: 170;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+.assistantToggle {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #0a246a;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #ffffff, #d9ecff);
+    color: #003c9d;
+    font-size: 18px;
+    font-weight: 900;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.assistantToggleIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.assistantBody {
+    width: min(300px, calc(100vw - 68px));
+    background: #ece9d8;
+    border: 1px solid #0a246a;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.28);
+}
+
+.assistantHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    color: #fff;
+    background: linear-gradient(to bottom, #2f79e7, #0d44aa);
+}
+
+.assistantHeader img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.assistantHeader strong,
+.assistantHeader span {
+    display: block;
+}
+
+.assistantHeader strong {
+    font-size: 12px;
+}
+
+.assistantHeader span {
+    margin-top: 1px;
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.assistantList {
+    display: grid;
+    gap: 3px;
+    padding: 5px;
+}
+
+.assistantItem {
+    display: block;
+    width: 100%;
+    padding: 7px;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.assistantItem:hover {
+    background: #316ac5;
+    color: #fff;
+}
+
+.assistantItem span,
+.assistantItem small {
+    display: block;
+}
+
+.loadingWindow {
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    background: #ece9d8;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.assistantItem span {
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.assistantItem small {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: inherit;
+}
+
+@media (max-width: 760px) {
+    .assistant {
+        right: 8px;
+        bottom: 48px;
+    }
+}

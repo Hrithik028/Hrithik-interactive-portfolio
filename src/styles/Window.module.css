@@ -64,10 +64,11 @@
     flex: 0 0 auto;
 }
 
-.helpIcon {
-    width: 12px;
-    height: 12px;
-    color: #ffffff;
+.titleIconImg {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: block;
 }
 
 .titleText {
@@ -185,9 +186,9 @@
         height: 18px;
     }
 
-    .helpIcon {
-        width: 13px;
-        height: 13px;
+    .titleIconImg {
+        width: 15px;
+        height: 15px;
     }
 
     .titleText {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Taskbar.module.css";
-import { Menu, LogOut, Volume2, Wifi } from "lucide-react";
+import { Menu, LogOut, Volume2, Wifi, Grid2X2 } from "lucide-react";
 
 export default function Taskbar({
   openWindows,
@@ -8,6 +8,10 @@ export default function Taskbar({
   onWindowClick,
   isMobile = false,
   onLogout,
+  shortcuts = [],
+  onShortcutClick,
+  onOpenAll,
+  profileImage,
 }) {
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [startOpen, setStartOpen] = useState(false);
@@ -41,7 +45,10 @@ export default function Taskbar({
   };
 
   return (
-    <div className={`${styles.root} ${isMobile ? styles.rootMobile : ""}`}>
+    <div
+      data-desktop-context="ignore"
+      className={`${styles.root} ${isMobile ? styles.rootMobile : ""}`}
+    >
       <div ref={startRef} className={styles.startWrap}>
         <button
           type="button"
@@ -55,6 +62,58 @@ export default function Taskbar({
 
         {startOpen && (
           <div className={`${styles.startMenu} ${isMobile ? styles.startMenuMobile : ""}`}>
+            <div className={styles.startHeader}>
+              <div className={styles.startAvatar}>
+                {profileImage ? (
+                  <img src={profileImage} alt="" className={styles.startAvatarImg} draggable="false" />
+                ) : null}
+              </div>
+              <div>
+                <div className={styles.startName}>Hrithik OS</div>
+                <div className={styles.startVersion}>Windows XP Portfolio</div>
+              </div>
+            </div>
+
+            <div className={styles.menuSection}>
+              {shortcuts.map((item) => {
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={styles.menuItem}
+                    onClick={() => {
+                      setStartOpen(false);
+                      onShortcutClick?.(item.id);
+                    }}
+                  >
+                    {item.iconSrc ? (
+                      <img
+                        src={item.iconSrc}
+                        alt=""
+                        className={styles.menuIconImg}
+                        draggable="false"
+                      />
+                    ) : (
+                      <Grid2X2 className={styles.menuIcon} />
+                    )}
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className={styles.menuItem}
+              onClick={() => {
+                setStartOpen(false);
+                onOpenAll?.();
+              }}
+            >
+              <Grid2X2 className={styles.menuIcon} />
+              <span>Open Recruiter Layout</span>
+            </button>
+
             <button
               type="button"
               className={styles.menuItem}
