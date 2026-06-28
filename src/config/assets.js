@@ -22,5 +22,15 @@ export const ASSETS = {
 
     docs: {
         resume: `${ASSET_BASE}/docs/resume/Hrithik_Jadhav_Resume.pdf`
+    },
+
+    audio: {
+        playlist: [
+            {
+                id: "playing-your-memories",
+                title: "Playing Your Memories",
+                src: `${ASSET_BASE}/audio/background/dreamcore-main.mp3`
+            }
+        ]
     }
 };

@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ASSETS } from "../config/assets";
 import styles from "../styles/Desktop.module.css";
 import assistantIcon from "../assets/icons/Assistant.png";
+import { Pause, Play, Volume1, Volume2, VolumeX } from "lucide-react";
 
 import Taskbar from "./Taskbar";
 import Window from "./Window";
@@ -22,6 +23,11 @@ const MOBILE_TASKBAR_HEIGHT = 40;
 
 const MOBILE_MAX = 639;
 const TABLET_MAX = 1023;
+const AUDIO_VOLUME_KEY = "desktop_background_volume";
+const AUDIO_MUTED_KEY = "desktop_background_muted";
+const AUDIO_PLAYING_KEY = "desktop_background_playing";
+const AUDIO_TRACK_KEY = "desktop_background_track";
+const AUDIO_WIDGET_POS_KEY = "desktop_audio_widget_position";
 
 
 const desktopIcons = [
@@ -143,6 +149,9 @@ function computeRecruiterPreset(vw, vh, taskbarHeight, viewportMode) {
 }
 
 export default function Desktop({ session, onLogout }) {
+  const audioRef = useRef(null);
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const playlist = ASSETS.audio.playlist;
   const isRecruiterMode =
     String(session?.mode || "").toLowerCase() === "recruiter";
 
@@ -160,6 +169,44 @@ export default function Desktop({ session, onLogout }) {
   const [assistantOpen, setAssistantOpen] = useState(true);
   const [recruiterStackMode, setRecruiterStackMode] = useState(false);
   const [desktopTime, setDesktopTime] = useState(() => new Date());
+  const [audioVolume, setAudioVolume] = useState(() => {
+    const saved = Number(window.localStorage.getItem(AUDIO_VOLUME_KEY));
+    return Number.isFinite(saved) ? Math.min(1, Math.max(0, saved)) : 0.18;
+  });
+  const [audioMuted, setAudioMuted] = useState(
+    () => window.localStorage.getItem(AUDIO_MUTED_KEY) === "true"
+  );
+  const [audioPlaying, setAudioPlaying] = useState(() => {
+    const saved = window.localStorage.getItem(AUDIO_PLAYING_KEY);
+    return saved === null ? true : saved === "true";
+  });
+  const [audioAutoplayBlocked, setAudioAutoplayBlocked] = useState(false);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(() => {
+    const saved = Number(window.localStorage.getItem(AUDIO_TRACK_KEY));
+    if (!Number.isFinite(saved)) return 0;
+    return Math.min(Math.max(0, saved), Math.max(playlist.length - 1, 0));
+  });
+  const [musicWidgetPosition, setMusicWidgetPosition] = useState(() => {
+    const saved = window.localStorage.getItem(AUDIO_WIDGET_POS_KEY);
+    if (!saved) {
+      return { top: 14, right: 108 };
+    }
+
+    try {
+      const parsed = JSON.parse(saved);
+      if (
+        typeof parsed?.top === "number" &&
+        typeof parsed?.right === "number"
+      ) {
+        return parsed;
+      }
+    } catch {
+      return { top: 14, right: 108 };
+    }
+
+    return { top: 14, right: 108 };
+  });
+  const [isDraggingMusicWidget, setIsDraggingMusicWidget] = useState(false);
 
   const isMobile = viewport === "mobile";
   const isTablet = viewport === "tablet";
@@ -189,6 +236,113 @@ export default function Desktop({ session, onLogout }) {
     const timer = window.setInterval(() => setDesktopTime(new Date()), 1000);
     return () => window.clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(AUDIO_VOLUME_KEY, String(audioVolume));
+  }, [audioVolume]);
+
+  useEffect(() => {
+    window.localStorage.setItem(AUDIO_MUTED_KEY, String(audioMuted));
+  }, [audioMuted]);
+
+  useEffect(() => {
+    window.localStorage.setItem(AUDIO_PLAYING_KEY, String(audioPlaying));
+  }, [audioPlaying]);
+
+  useEffect(() => {
+    window.localStorage.setItem(AUDIO_TRACK_KEY, String(currentTrackIndex));
+  }, [currentTrackIndex]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      AUDIO_WIDGET_POS_KEY,
+      JSON.stringify(musicWidgetPosition)
+    );
+  }, [musicWidgetPosition]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.volume = audioVolume;
+  }, [audioVolume]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = audioMuted;
+  }, [audioMuted]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.load();
+
+    if (!audioPlaying) {
+      audioRef.current.pause();
+      return;
+    }
+
+    const playPromise = audioRef.current.play();
+    if (playPromise?.catch) {
+      playPromise
+        .then(() => {
+          setAudioAutoplayBlocked(false);
+        })
+        .catch(() => {
+          setAudioAutoplayBlocked(true);
+        });
+    } else {
+      setAudioAutoplayBlocked(false);
+    }
+  }, [audioPlaying, currentTrackIndex]);
+
+  useEffect(() => {
+    if (!audioPlaying || !audioAutoplayBlocked) return undefined;
+
+    const resumeAudio = () => {
+      if (!audioRef.current) return;
+
+      const retryPromise = audioRef.current.play();
+      if (retryPromise?.catch) {
+        retryPromise
+          .then(() => {
+            setAudioAutoplayBlocked(false);
+          })
+          .catch(() => {
+            return;
+          });
+      } else {
+        setAudioAutoplayBlocked(false);
+      }
+    };
+
+    window.addEventListener("pointerdown", resumeAudio, { once: true });
+    window.addEventListener("keydown", resumeAudio, { once: true });
+    window.addEventListener("touchstart", resumeAudio, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", resumeAudio);
+      window.removeEventListener("keydown", resumeAudio);
+      window.removeEventListener("touchstart", resumeAudio);
+    };
+  }, [audioPlaying, audioAutoplayBlocked]);
+
+  useEffect(() => {
+    if (!audioPlaying) {
+      setAudioAutoplayBlocked(false);
+    }
+  }, [audioPlaying]);
+
+  useEffect(() => {
+    if (!audioRef.current) return undefined;
+
+    const handleEnded = () => {
+      setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
+    };
+
+    audioRef.current.addEventListener("ended", handleEnded);
+    return () => {
+      audioRef.current?.removeEventListener("ended", handleEnded);
+    };
+  }, [playlist.length]);
 
   useEffect(() => {
   if (isMobile) {
@@ -573,6 +727,60 @@ export default function Desktop({ session, onLogout }) {
     }
   ];
 
+  const currentTrack = playlist[currentTrackIndex] ?? playlist[0];
+  const VolumeIcon =
+    audioMuted || audioVolume === 0
+      ? VolumeX
+      : audioVolume < 0.5
+        ? Volume1
+        : Volume2;
+
+  const handleToggleAudioPlayback = () => {
+    setAudioPlaying((prev) => !prev);
+  };
+
+  const handleVolumeChange = (nextVolume) => {
+    setAudioVolume(nextVolume);
+    if (nextVolume > 0 && audioMuted) {
+      setAudioMuted(false);
+    }
+  };
+
+  const handleToggleMute = () => {
+    setAudioMuted((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (!isDraggingMusicWidget) return undefined;
+
+    const handlePointerMove = (event) => {
+      const nextLeft = event.clientX - dragOffsetRef.current.x;
+      const nextTop = event.clientY - dragOffsetRef.current.y;
+      const widgetWidth = isMobile ? 220 : 236;
+      const maxLeft = Math.max(8, window.innerWidth - widgetWidth - 8);
+      const maxTop = Math.max(8, window.innerHeight - taskbarHeight - 140);
+      const clampedLeft = Math.min(Math.max(8, nextLeft), maxLeft);
+      const clampedTop = Math.min(Math.max(8, nextTop), maxTop);
+
+      setMusicWidgetPosition({
+        top: clampedTop,
+        right: Math.max(8, window.innerWidth - clampedLeft - widgetWidth),
+      });
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingMusicWidget(false);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [isDraggingMusicWidget, isMobile, taskbarHeight]);
+
 
   const renderWindows = () =>
     openWindows.map((windowId, index) => {
@@ -703,6 +911,81 @@ export default function Desktop({ session, onLogout }) {
       </div>
 
       <div
+        className={`${styles.musicWidget} ${
+          isDraggingMusicWidget ? styles.musicWidgetDragging : ""
+        }`}
+        data-desktop-context="ignore"
+        style={{
+          top: `${musicWidgetPosition.top}px`,
+          right: `${musicWidgetPosition.right}px`,
+        }}
+      >
+        <div
+          className={styles.musicWidgetHeader}
+          onPointerDown={(event) => {
+            const bounds = event.currentTarget.parentElement?.getBoundingClientRect();
+            if (!bounds) return;
+
+            dragOffsetRef.current = {
+              x: event.clientX - bounds.left,
+              y: event.clientY - bounds.top,
+            };
+            setIsDraggingMusicWidget(true);
+          }}
+        >
+          <span>Now Playing</span>
+        </div>
+
+        <div className={styles.musicWidgetBody}>
+          <div
+            className={`${styles.musicRecord} ${
+              audioPlaying ? styles.musicRecordSpinning : ""
+            }`}
+            aria-hidden="true"
+          >
+            <span className={styles.musicRecordCenter} />
+          </div>
+
+          <div className={styles.musicMeta}>
+            <strong>{currentTrack.title}</strong>
+          </div>
+        </div>
+
+        <div className={styles.musicControls}>
+          <button
+            type="button"
+            className={`${styles.musicControlButton} ${styles.musicControlPrimary}`}
+            onClick={handleToggleAudioPlayback}
+            title={audioPlaying ? "Pause music" : "Play music"}
+          >
+            {audioPlaying ? <Pause size={14} /> : <Play size={14} />}
+          </button>
+          <button
+            type="button"
+            className={styles.musicControlButton}
+            onClick={handleToggleMute}
+            title={audioMuted || audioVolume === 0 ? "Unmute" : "Mute"}
+          >
+            <VolumeIcon size={14} />
+          </button>
+        </div>
+
+        <label className={styles.musicSliderGroup}>
+          <span>Volume</span>
+          <input
+            className={styles.musicSlider}
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={audioVolume}
+            onChange={(event) => handleVolumeChange(Number(event.target.value))}
+          />
+        </label>
+
+      </div>
+
+      <div
         className={`${styles.assistant} ${assistantOpen ? styles.assistantOpen : styles.assistantClosed}`}
         data-desktop-context="ignore"
       >
@@ -812,6 +1095,11 @@ export default function Desktop({ session, onLogout }) {
         });
       }}
     >
+      <audio
+        ref={audioRef}
+        src={currentTrack.src}
+        preload="auto"
+      />
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
         style={{ backgroundImage: `url(${wallpaper})` }}

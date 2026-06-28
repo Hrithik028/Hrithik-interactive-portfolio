@@ -116,14 +116,6 @@ export default function LoginScreen({ onLogin }) {
                                 >
                                     Switch User
                                 </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => onLogin({ name: "Guest", mode: "Guest" })}
-                                    className={`${styles.glassBtn} ${styles.glassB}`}
-                                >
-                                    Guest
-                                </button>
                             </div>
 
                             {showSwitch && (

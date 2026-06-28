@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Taskbar.module.css";
-import { Menu, LogOut, Volume2, Wifi, Grid2X2 } from "lucide-react";
+import { Grid2X2, LogOut, Menu, Wifi } from "lucide-react";
 
 export default function Taskbar({
   openWindows,
@@ -165,7 +165,6 @@ export default function Taskbar({
       </div>
 
       <div className={`${styles.tray} ${isMobile ? styles.trayMobile : ""}`}>
-        <Volume2 className={styles.trayIcon} />
         <Wifi className={styles.trayIcon} />
         <div className={`${styles.clock} ${isMobile ? styles.clockMobile : ""}`}>
           {currentTime.toLocaleTimeString([], {
