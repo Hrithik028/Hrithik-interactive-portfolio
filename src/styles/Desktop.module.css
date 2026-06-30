@@ -148,31 +148,92 @@
     border: 1px solid #c9c3ad;
 }
 
+.musicTurntable {
+    position: relative;
+    width: 58px;
+    height: 50px;
+    flex: 0 0 auto;
+}
+
 .musicRecord {
+    position: relative;
     width: 46px;
     height: 46px;
     flex: 0 0 auto;
     display: grid;
     place-items: center;
     border-radius: 50%;
+    margin-top: 2px;
     background:
-        radial-gradient(circle at center, #ece7ff 0 12%, #516fcb 13% 20%, transparent 21%),
-        repeating-radial-gradient(circle at center, #141414 0 3px, #242424 3px 6px);
+        radial-gradient(circle at center, #d5dbeb 0 9%, #5d6f95 10% 18%, #0f0f12 19% 100%),
+        repeating-radial-gradient(circle at center, #191919 0 3px, #262626 3px 6px);
     box-shadow:
         inset 0 0 0 2px rgba(255, 255, 255, 0.09),
+        inset 0 0 0 4px rgba(0, 0, 0, 0.18),
         1px 1px 0 rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.musicRecord::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.2) 0 10%, transparent 11%),
+        conic-gradient(from 35deg, rgba(255, 255, 255, 0.16) 0deg 26deg, transparent 26deg 180deg, rgba(255, 255, 255, 0.1) 180deg 205deg, transparent 205deg 360deg);
+    opacity: 0.9;
 }
 
 .musicRecordSpinning {
-    animation: spinRecord 3.8s linear infinite;
+    animation: spinRecord 2.6s linear infinite;
+    will-change: transform;
 }
 
 .musicRecordCenter {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #d8e5ff;
-    box-shadow: 0 0 0 2px #5d7ad0;
+    background: #d8dce7;
+    box-shadow:
+        0 0 0 2px #60719b,
+        0 0 0 5px #c9d0df;
+}
+
+.musicTonearmBase {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #eff4fc 0 28%, #9aa7b9 29% 58%, #526072 59% 100%);
+    box-shadow: 0 0 0 1px rgba(70, 78, 95, 0.55);
+}
+
+.musicTonearm {
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    width: 3px;
+    height: 24px;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, #eef3fb, #a7b3c1 42%, #727f8e 100%);
+    transform-origin: top center;
+    transform: rotate(33deg);
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.35);
+}
+
+.musicTonearmHead {
+    position: absolute;
+    right: 17px;
+    bottom: 12px;
+    width: 11px;
+    height: 6px;
+    border-radius: 2px 2px 3px 3px;
+    background: linear-gradient(to bottom, #f2f4f7, #7d8997);
+    transform: rotate(33deg);
+    box-shadow: 0 0 0 1px rgba(70, 78, 95, 0.35);
 }
 
 .musicMeta {

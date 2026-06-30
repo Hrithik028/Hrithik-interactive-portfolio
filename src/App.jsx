@@ -56,7 +56,7 @@ function App() {
   if (!booted) {
     return (
       <div className="min-h-screen">
-        <Desktop session={session} onLogout={handleLogout} />
+        <Desktop session={session} onLogout={handleLogout} audioReady={booted} />
         <BootScreen onComplete={() => setBooted(true)} />
       </div>
     );
@@ -64,7 +64,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      <Desktop session={session} onLogout={handleLogout} />
+      <Desktop session={session} onLogout={handleLogout} audioReady={booted} />
     </div>
   );
 }
