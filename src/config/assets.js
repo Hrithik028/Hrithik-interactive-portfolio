@@ -12,7 +12,8 @@ export const ASSETS = {
         monitor: `${ASSET_BASE}/icons/desktop/utilities-system-monitor.png`,
         terminal: `${ASSET_BASE}/icons/desktop/utilities-terminal.png`,
         dashboard: `${ASSET_BASE}/icons/desktop/cs-applets.png`,
-        windowsLogo: `${ASSET_BASE}/icons/desktop/windows-logo.webp`
+        windowsLogo: `${ASSET_BASE}/icons/desktop/windows-logo.webp`,
+        startHere: `${ASSET_BASE}/portfolio-assets/icons/desktop/start-here.png`
     },
 
     images: {

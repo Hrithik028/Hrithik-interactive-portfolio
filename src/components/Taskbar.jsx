@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Taskbar.module.css";
-import { Grid2X2, LogOut, Menu, Wifi } from "lucide-react";
+import { Grid2X2, LogOut, Wifi } from "lucide-react";
+import { ASSETS } from "../config/assets";
+import startHereFallback from "../assets/icons/start-here.png";
 
 export default function Taskbar({
   openWindows,
@@ -56,7 +58,16 @@ export default function Taskbar({
           onClick={() => setStartOpen((prev) => !prev)}
           title="Start"
         >
-          <Menu className={styles.startIcon} />
+          <img
+            src={ASSETS.icons.startHere}
+            alt=""
+            className={styles.startIconImg}
+            draggable="false"
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = startHereFallback;
+            }}
+          />
           {!isMobile && <span>Start</span>}
         </button>
 

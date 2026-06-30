@@ -52,6 +52,14 @@
     flex: 0 0 auto;
 }
 
+.startIconImg {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: block;
+    flex: 0 0 auto;
+}
+
 .windows {
     flex: 1 1 auto;
     min-width: 0;

@@ -148,7 +148,7 @@ function computeRecruiterPreset(vw, vh, taskbarHeight, viewportMode) {
   };
 }
 
-export default function Desktop({ session, onLogout }) {
+export default function Desktop({ session, onLogout, audioReady = true }) {
   const audioRef = useRef(null);
   const dragOffsetRef = useRef({ x: 0, y: 0 });
   const playlist = ASSETS.audio.playlist;
@@ -273,6 +273,12 @@ export default function Desktop({ session, onLogout }) {
   useEffect(() => {
     if (!audioRef.current) return;
 
+    if (!audioReady) {
+      audioRef.current.pause();
+      setAudioAutoplayBlocked(false);
+      return;
+    }
+
     audioRef.current.load();
 
     if (!audioPlaying) {
@@ -292,10 +298,10 @@ export default function Desktop({ session, onLogout }) {
     } else {
       setAudioAutoplayBlocked(false);
     }
-  }, [audioPlaying, currentTrackIndex]);
+  }, [audioPlaying, currentTrackIndex, audioReady]);
 
   useEffect(() => {
-    if (!audioPlaying || !audioAutoplayBlocked) return undefined;
+    if (!audioReady || !audioPlaying || !audioAutoplayBlocked) return undefined;
 
     const resumeAudio = () => {
       if (!audioRef.current) return;
@@ -323,7 +329,7 @@ export default function Desktop({ session, onLogout }) {
       window.removeEventListener("keydown", resumeAudio);
       window.removeEventListener("touchstart", resumeAudio);
     };
-  }, [audioPlaying, audioAutoplayBlocked]);
+  }, [audioReady, audioPlaying, audioAutoplayBlocked]);
 
   useEffect(() => {
     if (!audioPlaying) {
@@ -335,6 +341,21 @@ export default function Desktop({ session, onLogout }) {
     if (!audioRef.current) return undefined;
 
     const handleEnded = () => {
+      if (playlist.length <= 1) {
+        audioRef.current.currentTime = 0;
+
+        if (audioPlaying) {
+          const replayPromise = audioRef.current.play();
+          if (replayPromise?.catch) {
+            replayPromise.catch(() => {
+              setAudioAutoplayBlocked(true);
+            });
+          }
+        }
+
+        return;
+      }
+
       setCurrentTrackIndex((prev) => (prev + 1) % playlist.length);
     };
 
@@ -342,7 +363,7 @@ export default function Desktop({ session, onLogout }) {
     return () => {
       audioRef.current?.removeEventListener("ended", handleEnded);
     };
-  }, [playlist.length]);
+  }, [audioPlaying, playlist.length]);
 
   useEffect(() => {
   if (isMobile) {
@@ -937,13 +958,17 @@ export default function Desktop({ session, onLogout }) {
         </div>
 
         <div className={styles.musicWidgetBody}>
-          <div
-            className={`${styles.musicRecord} ${
-              audioPlaying ? styles.musicRecordSpinning : ""
-            }`}
-            aria-hidden="true"
-          >
-            <span className={styles.musicRecordCenter} />
+          <div className={styles.musicTurntable} aria-hidden="true">
+            <div
+              className={`${styles.musicRecord} ${
+                audioReady && audioPlaying ? styles.musicRecordSpinning : ""
+              }`}
+            >
+              <span className={styles.musicRecordCenter} />
+            </div>
+            <span className={styles.musicTonearmBase} />
+            <span className={styles.musicTonearm} />
+            <span className={styles.musicTonearmHead} />
           </div>
 
           <div className={styles.musicMeta}>
@@ -1098,7 +1123,7 @@ export default function Desktop({ session, onLogout }) {
       <audio
         ref={audioRef}
         src={currentTrack.src}
-        preload="auto"
+        preload={audioReady ? "auto" : "none"}
       />
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
